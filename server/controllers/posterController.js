@@ -12,6 +12,7 @@ export const scanPoster = async (req, res) => {
   if (!deviceId || !posterId) return res.status(400).json({ error: 'Missing deviceId or posterId' });
 
   try {
+    
     let user = await User.findOne({ deviceId });
     if (!user) {
       user = new User({ deviceId, badges: [] });
@@ -26,6 +27,7 @@ export const scanPoster = async (req, res) => {
     await user.save();
 
     const poster = await Poster.findOne({ posterId });
+
     if (!poster) return res.status(404).json({ error: 'Poster not found' });
 
     res.json({
@@ -53,7 +55,7 @@ export const submitQuiz = async (req, res) => {
 
     const isCorrect = selectedAnswer === poster.correctAnswer;
     if (!isCorrect) {
-      return res.status(200).json({ correct: false, message: 'Wrong answer. Try again!' });
+      return res.status(200).json({ correct: false, message: 'Try again!' });
     }
 
     let user = await User.findOne({ deviceId });
@@ -61,7 +63,10 @@ export const submitQuiz = async (req, res) => {
 
     if (!user.badges.includes(posterId)) {
       user.badges.push(posterId);
-      if (user.badges.length >= 5) user.voucherUnlocked = true;
+
+      // Voucher logic: unlock if 5 badges collected
+      const voucherScanCount = 5;
+      if (user.badges.length >= voucherScanCount) user.voucherUnlocked = true;
       await user.save();
     }
 
@@ -109,3 +114,28 @@ export const getLeaderboard = async (req, res) => {
     res.status(500).json({ error: 'Error fetching leaderboard' });
   }
 };
+
+
+// Delete a question
+
+export const deleteQuestion = async (req, res) => {
+  try {
+    await Poster.deleteOne({ posterId: req.params.posterId });
+    res.status(200).json({ message: 'Question deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error deleting question' });
+    
+  }
+}
+
+// Delete all question
+export const deleteAllQuestions =  async (req, res) => {
+  try {
+     await Poster.deleteMany({});
+     res.status(200).json({ message: 'All questions deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error deleting all questions' });
+  }
+}
