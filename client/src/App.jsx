@@ -7,43 +7,11 @@ import { getDeviceId, getDeviceIdPaid } from './utils/fingerprint.js';
 import { randomNickName } from './utils/randonNameGenerator.js';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import uniqueDevice from './hooks/uniqueDevice.js';
 
 
 function App() {
-  const [deviceId, setDeviceId] = useState('');
-  const [nickName, setNickName] = useState('');
-
-  useEffect(() => {
-    const init = async () => {
-      // Checking the local storage
-      let localDeviceId = localStorage.getItem('deviceId');
-      let localNickName = localStorage.getItem('nickName');
-
-        if (!localDeviceId) {
-          const id = await getDeviceId();
-          if (id){
-            localDeviceId = id;
-            localStorage.setItem('deviceId', id);
-
-          }     
-        }
-
-        if (!localNickName){
-          localNickName = randomNickName;
-          localStorage.setItem('nickName', localNickName);
-        }
-
-      setDeviceId(localDeviceId);
-      setNickName(localNickName);
-
-      console.log(localNickName);
-      console.log(localDeviceId);
-    
-
-  };
-
-    init();})
-
+  const {deviceId, nickName} = uniqueDevice();
   
 
   return (
@@ -52,6 +20,14 @@ function App() {
         <Route path="/quiz/:posterId" element={<QuizPage />} />
         <Route path="/badge" element={<Badge />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/result" element={
+          <div>
+            <h1>Quiz Result</h1>
+            <p>Thank you for participating!</p>
+            <p>Your Device ID: {deviceId}</p>
+            <p>Your Nickname: {nickName}</p>
+          </div>
+        } />
         <Route path="/" element={
           <div>
             <h1>Welcome to the Poster Quiz App</h1>

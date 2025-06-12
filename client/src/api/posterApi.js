@@ -27,6 +27,8 @@ export const submitQuiz = async (deviceId, posterId, selectedAnswer) =>{
             body: JSON.stringify({ deviceId, posterId, selectedAnswer }),
 
         });
+        return await res.json();
+        
     } catch (error) {
         console.error('Error submitting quiz:', error);
     }
