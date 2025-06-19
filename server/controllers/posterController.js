@@ -54,11 +54,13 @@ export const submitQuiz = async (req, res) => {
     if (!poster) return res.status(404).json({ error: 'Poster not found' });
 
     const isCorrect = selectedAnswer === poster.correctAnswer;
+    
     if (!isCorrect) {
       return res.status(200).json({ correct: false, message: 'Try again!' });
     }
 
     let user = await User.findOne({ deviceId });
+
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     if (!user.badges.includes(posterId)) {
