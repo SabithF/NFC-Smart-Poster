@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDeviceId, getDeviceIdPaid } from '../utils/fingerprint.js';
+import { getDeviceId } from '../utils/fingerprint.js';
 import { randomNickName } from '../utils/randonNameGenerator.js';
 
 export default function uniqueDevice() {

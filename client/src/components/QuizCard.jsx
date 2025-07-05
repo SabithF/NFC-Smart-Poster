@@ -4,7 +4,7 @@ import React from "react";// Assuming posterId is defined in fingerprint.js
 
 export function QuizCard({ questionData, selectedAnswer, setSelectedAnswer, feedback,  handleSubmit, posterId }) {
   return (
-    <div className="bg-gray-900/30 backdrop-blur-lg rounded-xl p-6 shadow-2xl border border-cyan-500/20 hover:shadow-cyan-500/50 transition-shadow duration-300">
+    <div className="bg-gray-900/30 mb-8 backdrop-blur-lg rounded-xl p-6 shadow-2xl border border-cyan-500/20 hover:shadow-cyan-500/50 transition-shadow duration-300">
         <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center 

@@ -4,6 +4,9 @@ import { scanPoster, submitQuiz } from '../api/posterApi';
 import { getDeviceId } from '../utils/fingerprint.js';
 import {UserProfile} from './UserProfile.jsx';
 import { QuizCard } from './QuizCard.jsx';
+import { ProductBanner } from './ProductBanner.jsx';
+import Badge from './Badge.jsx';
+import LeaderBoard from './LeaderBoard.jsx';
 
 
 function QuizPage() {
@@ -80,31 +83,7 @@ function QuizPage() {
 
 
     return (
-      // <div className="p-6 max-w-xl mx-auto">
-      //   <h2 className="text-2xl font-bold mb-4"> Quiz</h2>
-      //   <p className="mb-2 font-medium">{questionData.question}</p>
-
-      //   {questionData.options.map((option, index) => (
-      //      <label key={index} className="block mb-2">
-      //         <input
-      //           type="radio"
-      //           name="answer"
-      //           value={option}
-      //           checked={selectedAnswer === option}
-      //           onChange={(e) => setSelectedAnswer(e.target.value)}
-      //           className="mr-2"
-      //         />
-      //     {option}
-      //   </label>
-      //   ))}
-
-      //   {feedback && <div className="text-red-600 mb-4">{feedback}</div>}
-      //   <button
-      //     onClick={handleSubmit}
-      //     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-      //     Submit Answer
-      //     </button>
-      // </div>
+  
 
       <div className="min-h-screen bg-gradient-to-r from-slate-900 to-slate-700 text-white"> 
         {/* bg pattern */}
@@ -115,7 +94,9 @@ function QuizPage() {
 
         <div className="relative z-10 container mx-auto px-4 py-10 max-w-6xl">
 
+
           <UserProfile  />
+          <ProductBanner />
 
           {/* Quiz Card */}
 
@@ -128,7 +109,10 @@ function QuizPage() {
             posterId={posterId}
           />
 
-          
+          <Badge deviceId={deviceId} />
+          <LeaderBoard />
+
+
         </div>
 
 
