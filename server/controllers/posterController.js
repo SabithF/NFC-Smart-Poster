@@ -1,34 +1,60 @@
 // controllers/posterController.js
 import User from '../models/user.js';
 import Poster from '../models/poster.js';
+import { randomNickName } from '../utils/randomNameGenerator.js';
+import { generateUserNumber } from '../utils/generateUserNumber.js';
+
+
+
 
 // 1. Handle NFC Scan
 export const scanPoster = async (req, res) => {
-
   const { deviceId, posterId } = req.body;
 
-  console.log('BODY:', req.body);
+  console.log('📩 Incoming scan request:', { deviceId, posterId });
 
-  if (!deviceId || !posterId) return res.status(400).json({ error: 'Missing deviceId or posterId' });
+  if (!deviceId || !posterId) {
+    return res.status(400).json({ error: 'Missing deviceId or posterId' });
+  }
 
   try {
-    
     let user = await User.findOne({ deviceId });
+    console.log('🔍 User found:', user);
+
     if (!user) {
-      user = new User({ deviceId, badges: [] });
+      const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      const nickName = randomNickName();
+      const userUniqueId = await generateUserNumber();
+
+      console.log('🆕 Creating user with:', { nickName, userUniqueId, ip });
+
+      user = new User({
+        deviceId,
+        nickName,
+        deviceIp: ip,
+        userUniqueId,
+        badges: [],
+        scanCount: 0, // ← ensure this exists in schema or set default
+      });
+
+      await user.save();
+      console.log('✅ User saved to DB:', user);
     }
 
     if (user.badges.includes(posterId)) {
       return res.status(400).json({ message: 'Poster already scanned.' });
     }
 
+    const poster = await Poster.findOne({ posterId });
+    console.log('📌 Poster found:', poster);
+
+    if (!poster) {
+      return res.status(404).json({ error: 'Poster not found' });
+    }
+
     user.scanCount += 1;
     user.lastScan = new Date();
     await user.save();
-
-    const poster = await Poster.findOne({ posterId });
-
-    if (!poster) return res.status(404).json({ error: 'Poster not found' });
 
     res.json({
       question: poster.question,
@@ -36,10 +62,11 @@ export const scanPoster = async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error('❌ Server error in scanPoster:', err);
     res.status(500).json({ error: 'Server error during scan' });
   }
 };
+
 
 // 2. Handle Quiz Submission
 export const submitQuiz = async (req, res) => {
@@ -108,8 +135,11 @@ export const getLeaderboard = async (req, res) => {
   try {
     const topUsers = await User.find().sort({ scanCount: -1 }).limit(10);
     res.json(topUsers.map(u => ({
-      deviceId: u.deviceId.slice(0, 6) + '...',
-      scanCount: u.scanCount
+      deviceId: u.deviceId,
+      scanCount: u.scanCount,
+      nickName: u.nickName,
+      userId: u.userId,
+
     })));
   } catch (err) {
     console.error(err);

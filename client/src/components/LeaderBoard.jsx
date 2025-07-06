@@ -1,7 +1,7 @@
 
 import { getLeaderboard } from '../api/posterApi';
 import React, { useState, useEffect, use } from 'react';
-import uniqueDevice from '../hooks/uniqueDevice.js';
+import { uniqueDevice } from '../hooks/uniqueDevice.js';
 
 
 const rankStyles = {
@@ -12,52 +12,54 @@ const rankStyles = {
 
 
 export default function LeaderBoard() {
-    const { deviceId: currentDeviceId, nickName: currentNickName } = uniqueDevice();
-    const [leader, setLeader] = useState([]);
-    const [loading, setLoading] = useState(true)
+  const { deviceId: currentDeviceId, nickName: currentNickName } = uniqueDevice();
+  const [leader, setLeader] = useState([]);
+  const [loading, setLoading] = useState(true)
 
 
-    useEffect(() => {
-        const fetchLeaderboard = async () => {
-            try {
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
 
-                const data = await getLeaderboard();
-                setLeader(data || []); 
+        const data = await getLeaderboard();
+        setLeader(data || []);
+        console.log("Leaderboard data fetched:", data);
 
-            } catch (error) {
-                console.error("Error fetching leaderboard:", error);
-            }finally {
-                setLoading(false);
-            }
-        };
-        fetchLeaderboard();
+      } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLeaderboard();
 
-    }, [])  ;
+  }, []);
 
-    if (loading) return <div className="text-sm text-gray-300">Loading leaderboard...</div>;
+  if (loading) return <div className="text-sm text-gray-300">Loading leaderboard...</div>;
 
-   const getRankNumber = (index, isCurrentUser) => {
+  const getRankNumber = (index, isCurrentUser) => {
+    console.log("Current user :", currentDeviceId, "Nickename", currentNickName)
     const baseStyle = 'flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm'
-    const style =  rankStyles[index] || (
-        isCurrentUser 
+    const style = rankStyles[index] || (
+      isCurrentUser
         ? { bg: 'bg-cyan-400', text: 'text-gray-900' }
         : { bg: 'bg-gray-600', text: 'text-gray-300' }
     );
     return (
-        <div className={`${baseStyle} ${style.bg} ${style.text}`}>
-            {index + 1}
-        </div>
+      <div className={`${baseStyle} ${style.bg} ${style.text}`}>
+        {index + 1}
+      </div>
     )
-}
+  }
 
 
-     return (
+  return (
     <div className="bg-gray-800/50 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-cyan-500/20 max-w-2xl mx-auto">
       <h3 className="text-xl font-bold text-white mb-4 flex items-center">
         <svg className="w-6 h-6 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
-        Leaderboard
+        Leaderboard 
       </h3>
 
       {leader.length === 0 ? (
@@ -68,7 +70,7 @@ export default function LeaderBoard() {
             const isCurrentUser = leader.deviceId === currentDeviceId;
             const nickName = isCurrentUser
               ? currentNickName
-              : `leader-${leader.deviceId.slice(0, 6)}...`;
+              : `${leader.nickName}`;
 
             return (
               <div

@@ -1,6 +1,16 @@
-const BASE_URL = 'http://localhost:8080/api/posters';
+const isLocalhost = window.location.hostname === 'localhost';
 
-// API function to fetch posters based on deviceId and posterId 
+const LOCAL_IP = '192.168.0.127';
+
+const BASE_URL = isLocalhost
+  ? 'http://localhost:8080/api/posters'
+  : `http://${LOCAL_IP}:8080/api/posters`;
+
+const USER_URL = isLocalhost
+  ? 'http://localhost:8080/api/users'
+  : `http://${LOCAL_IP}:8080/api/users`;
+
+// API function to fetch posters based on deviceId and posterId
 export const scanPoster = async (deviceId, posterId) => {
     try {
         const res = await fetch(`${BASE_URL}/scan`, {
@@ -15,6 +25,21 @@ export const scanPoster = async (deviceId, posterId) => {
         console.error('Error fetching posters:', error);
     }
 };
+
+// APi function to fetch user progile 
+export const getUserProfile = async (deviceId) => {
+    try {
+        const res = await fetch(`${USER_URL}/${deviceId}`);
+        if(!res.ok) throw new Error('User not found');
+        return await res.json();
+        
+        
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        return null; 
+    }
+
+}
 
 // API function to submit quiz answers
 export const submitQuiz = async (deviceId, posterId, selectedAnswer) =>{

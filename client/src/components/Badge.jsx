@@ -20,6 +20,7 @@ function getBadgeEmoji(badgeId) {
     return icons[badgeId] || '🏆';
 }
 
+
 export default function Badge({ deviceId }) {
     const [unlockedBadges, setUnlockedBadges] = useState([]);
     const [loading, setLoading] = useState(true);

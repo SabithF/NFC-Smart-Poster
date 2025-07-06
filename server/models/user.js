@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    nickName: {
+        type:  String,
+
+    },
     badges: [String],
     scanCount: {
         type: Number,
@@ -18,6 +22,13 @@ const userSchema = new mongoose.Schema({
     voucherUnlocked: {
         type: Boolean,
         default: false
+    },
+    deviceIp: {
+        type: String,
+    },
+    userUniqueId: {
+        type: Number,
+        unique: true,
     }
 
 })

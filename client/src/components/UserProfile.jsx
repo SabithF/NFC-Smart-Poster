@@ -1,6 +1,6 @@
 import React from "react";
 import { getDeviceId } from '../utils/fingerprint.js';
-import uniqueDevice from '../hooks/uniqueDevice.js';
+import {uniqueDevice} from '../hooks/uniqueDevice.js';
 
 
 

@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import QuizPage from './components/QuizPage.jsx';
 import Badge from './components/Badge.jsx';
 import Leaderboard from './components/LeaderBoard.jsx';
-import { getDeviceId, getDeviceIdPaid } from './utils/fingerprint.js';
+import { getDeviceId } from './utils/fingerprint.js';
 import { randomNickName } from './utils/randonNameGenerator.js';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import uniqueDevice from './hooks/uniqueDevice.js';
+import {uniqueDevice} from './hooks/uniqueDevice.js';
 
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
 
   return (
     <Router>
-      <Routes>
+      <Routes>S
         <Route path="/quiz/:posterId" element={<QuizPage />} />
         <Route path="/badge" element={<Badge />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
