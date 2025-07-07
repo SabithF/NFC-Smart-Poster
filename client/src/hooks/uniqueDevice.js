@@ -6,6 +6,7 @@ export const uniqueDevice = () => {
   const [deviceId, setDeviceId] = useState('');
   const [nickName, setNickName] = useState('');
   const [userId, setUserId] = useState('');
+  
 
   useEffect(() => {
     const init = async () => {
@@ -28,17 +29,21 @@ export const uniqueDevice = () => {
       if (profile) {
         localNickName = profile.nickName;
         localUserId = profile.userId;
+        
 
         localStorage.setItem('nickName', localNickName);
         localStorage.setItem('userId', localUserId);
+        
       }
 
       setNickName(localNickName || 'Thinking a name for you...');
       setUserId(localUserId || '');
+      
 
       console.log('Device ID:', localDeviceId);
       console.log('Nickname:', localNickName);
       console.log('User ID:', localUserId);
+     
     };
 
     init();

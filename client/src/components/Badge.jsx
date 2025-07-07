@@ -29,6 +29,7 @@ export default function Badge({ deviceId }) {
         if (!deviceId) return;
 
         const fetchBadges = async () => {
+            setLoading(true);
             try {
                 const data = await getUserProgress(deviceId);
                 setUnlockedBadges(data.badges || []);

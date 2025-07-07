@@ -1,15 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getDeviceId } from '../utils/fingerprint.js';
 import {uniqueDevice} from '../hooks/uniqueDevice.js';
+import { getUserProgress } from "../api/posterApi.js";
 
 
 
 export function UserProfile() {
     const { deviceId, nickName } = uniqueDevice();
+    const [scanCount, setScanCount] = useState(0);
+    const [badgeCount, setBadgeCount] = useState(0);
+
+    useEffect(() => {
+      const fetchProgress = async () => {
+        if (!deviceId) return;
+
+        try {
+          const progress = await getUserProgress(deviceId);
+          setScanCount(progress?.scanCount || 0)
+          setBadgeCount(progress?.badges?.length || 0);
+          
+        } catch (error) {
+          console.error("Error fetching user progress:", error);
+          
+        }
+      }
+      fetchProgress();
+    }, [deviceId])
 
     if (!deviceId || !nickName) {
         return <div>Loading user profile...</div>;
     }
+    const totalPoints = scanCount + 0 + badgeCount * 1000; // Placeholder for total points, can be dynamic based on user progress
 
   return (
     <header className="flex items-center justify-between mb-8">
@@ -32,8 +53,8 @@ export function UserProfile() {
             </div>
             {/* Username and details */}
             <div >
-                <h2 className="text-xl font-bold ">{nickName}</h2>
-                <p className="text-cyan-400">Scans: 0</p>
+                <h2 className="text-s font-bold lg:text-xl ">{nickName}</h2>
+                <p className="text-cyan-400">Scans: {scanCount}</p>
                 <div className="flex space-x-1">
                     {Array.from({ length: 5 }).map((_, index) => (
                 <svg key={index} className="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -45,9 +66,9 @@ export function UserProfile() {
         </div>
 
         {/* Score */}
-      <div className="bg-gradient-to-r from-green-500 to-teal-500 rounded-xl px-4 py-2 shadow-lg">
-        <div className="text-2xl font-bold text-gray-900">100</div>
-        <div className="text-xs opacity-90 text-gray-900">Total Score</div>
+      <div className="flex flex-col justify-center items-center text-center bg-gradient-to-r from-green-500 to-teal-500 rounded-xl px-4 py-2 shadow-lg w-25 h-20 lg:w-25 lg:h-15">
+        <div className="text-xl font-bold text-gray-900">{totalPoints}</div>
+        <div className="text-xs opacity-90 text-gray-900">Total Points</div>
       </div>
     </header>
   );

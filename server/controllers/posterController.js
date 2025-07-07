@@ -15,14 +15,25 @@ export const scanPoster = async (req, res) => {
 
   if (!deviceId || !posterId) {
     return res.status(400).json({ error: 'Missing deviceId or posterId' });
+
+    
+
   }
+    // Get the user's IP address
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (ip && ip.startsWith('::ffff:')) {
+          ip= ip.replace('::ffff:', ''); // Normalize IPv4-mapped IPv6 addresses
+        }
 
   try {
-    let user = await User.findOne({ deviceId });
+    let user = await User.findOne({ $or : [{deviceId}, {deviceIp: ip}] });
+
     console.log('🔍 User found:', user);
 
     if (!user) {
-      const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      
+
+
       const nickName = randomNickName();
       const userUniqueId = await generateUserNumber();
 
@@ -81,7 +92,7 @@ export const submitQuiz = async (req, res) => {
     if (!poster) return res.status(404).json({ error: 'Poster not found' });
 
     const isCorrect = selectedAnswer === poster.correctAnswer;
-    
+
     if (!isCorrect) {
       return res.status(200).json({ correct: false, message: 'Try again!' });
     }
@@ -157,15 +168,15 @@ export const deleteQuestion = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error deleting question' });
-    
+
   }
 }
 
 // Delete all question
-export const deleteAllQuestions =  async (req, res) => {
+export const deleteAllQuestions = async (req, res) => {
   try {
-     await Poster.deleteMany({});
-     res.status(200).json({ message: 'All questions deleted successfully' });
+    await Poster.deleteMany({});
+    res.status(200).json({ message: 'All questions deleted successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error deleting all questions' });

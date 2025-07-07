@@ -18,6 +18,9 @@ router.get('/:deviceId', async (req, res) => {
                 userId: user.userUniqueId,
                 scanCount: user.scanCount,
                 badges: user.badges,
+                deviceIp: user.deviceIp,
+                voucherUnlocked: user.voucherUnlocked,
+
             }
         )    
     } catch (error) {
