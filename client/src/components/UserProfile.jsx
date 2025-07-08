@@ -30,7 +30,7 @@ export function UserProfile() {
     if (!deviceId || !nickName) {
         return <div>Loading user profile...</div>;
     }
-    const totalPoints = scanCount + 0 + badgeCount * 1000; // Placeholder for total points, can be dynamic based on user progress
+    const totalPoints = ( scanCount *100 )  + (badgeCount * 1000); // Placeholder for total points, can be dynamic based on user progress
 
   return (
     <header className="flex items-center justify-between mb-8">

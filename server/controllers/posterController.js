@@ -31,9 +31,6 @@ export const scanPoster = async (req, res) => {
     console.log('🔍 User found:', user);
 
     if (!user) {
-      
-
-
       const nickName = randomNickName();
       const userUniqueId = await generateUserNumber();
 
@@ -45,7 +42,8 @@ export const scanPoster = async (req, res) => {
         deviceIp: ip,
         userUniqueId,
         badges: [],
-        scanCount: 0, // ← ensure this exists in schema or set default
+        scanCount: 0,
+        scannedPosters: [posterId] // ← ensure this exists in schema or set default
       });
 
       await user.save();
@@ -56,14 +54,19 @@ export const scanPoster = async (req, res) => {
       return res.status(400).json({ message: 'Poster already scanned.' });
     }
 
+    if (!user.scannedPosters.includes(posterId)){
+      user.scannedPosters.push(posterId);
+    }
+
     const poster = await Poster.findOne({ posterId });
+
     console.log('📌 Poster found:', poster);
 
     if (!poster) {
       return res.status(404).json({ error: 'Poster not found' });
     }
 
-    user.scanCount += 1;
+    user.scanCount = user.scannedPosters.length; // Update scanCount based on scannedPosters
     user.lastScan = new Date();
     await user.save();
 

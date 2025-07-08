@@ -9,7 +9,7 @@ import {
     deleteQuestion,
 } from '../controllers/posterController.js';
 
-
+// When Post request is made to /scan it will run the scanPoster function
 router.post('/scan', scanPoster);
 router.post('/quiz', submitQuiz);
 router.get('/progress/:deviceId', getUserProgress);

@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
 
     },
     badges: [String],
+    scannedPosters:{
+        type: [String],
+        default: []
+    },
     scanCount: {
         type: Number,
         default: 0
