@@ -59,7 +59,7 @@ function QuizPage() {
       try {
         const result = await submitQuiz(deviceId, posterId, selectedAnswer);
         if (result.correct) {
-          navigate('/badge', {
+          navigate('/', {
             state: {
               clue: result.clue,
               badges: result.badges,

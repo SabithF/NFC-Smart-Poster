@@ -3,8 +3,7 @@ import User from '../models/user.js';
 import Poster from '../models/poster.js';
 import { randomNickName } from '../utils/randomNameGenerator.js';
 import { generateUserNumber } from '../utils/generateUserNumber.js';
-
-
+import Voucher from '../models/voucher.js'
 
 
 // 1. Handle NFC Scan
@@ -16,13 +15,12 @@ export const scanPoster = async (req, res) => {
   if (!deviceId || !posterId) {
     return res.status(400).json({ error: 'Missing deviceId or posterId' });
 
-    
-
   }
-    // Get the user's IP address
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        if (ip && ip.startsWith('::ffff:')) {
-          ip= ip.replace('::ffff:', ''); // Normalize IPv4-mapped IPv6 addresses
+
+  // Get the user's IP address
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  if (ip && ip.startsWith('::ffff:')) {
+    ip= ip.replace('::ffff:', ''); // Normalize IPv4-mapped IPv6 addresses
         }
 
   try {
@@ -48,6 +46,11 @@ export const scanPoster = async (req, res) => {
 
       await user.save();
       console.log('✅ User saved to DB:', user);
+    } else {
+      if (!user.scannedPosters?.includes(posterId)){
+        user.scannedPosters.push(posterId);
+        console.log('📌 Poster added to user:', posterId);
+      }
     }
 
     if (user.badges.includes(posterId)) {
@@ -108,16 +111,55 @@ export const submitQuiz = async (req, res) => {
       user.badges.push(posterId);
 
       // Voucher logic: unlock if 5 badges collected
-      const voucherScanCount = 5;
+      const voucherScanCount = 3;
       if (user.badges.length >= voucherScanCount) user.voucherUnlocked = true;
       await user.save();
     }
 
+    // obtaining voucher code-------------------------
+    let userVoucherCode = null;
+
+    const allVouchers = await Voucher.find()
+    console.log("All vouchers",allVouchers)
+    
+    if (user.voucherUnlocked) {
+    const voucher = await Voucher.findOne({
+       expiryDate: { $gt: new Date() }, 
+     redeemedUsers: {$ne: user._id} 
+
+    });
+
+     
+
+  if (voucher) {
+    userVoucherCode = voucher.voucherCode;
+    console.log('🎟️ Voucher found:', voucher.voucherCode);
+    console.log('👤 User ID:', user._id);
+    console.log('📜 Already redeemed:', voucher.redeemedUsers);
+
+    // const alreadyRedeemed = voucher.redeemedUsers.some(id => String(id) === String(user._id));
+    const alreadyRedeemed = voucher.redeemedUsers.includes(user._id)
+
+    if (!alreadyRedeemed) {
+      console.log("🆕 Pushing user._id to voucher:", user._id);
+      voucher.redeemedUsers.push(user._id);
+      await voucher.save();
+
+    } else {
+      console.log("✅ User already in redeemed list.");
+    }
+  } else {
+    console.log("⚠️ No voucher found or expired.");
+  }
+}
     res.json({
       correct: true,
       clue: poster.clue,
       badges: user.badges,
       voucherUnlocked: user.voucherUnlocked,
+      voucherCode: userVoucherCode,
+
+      
     });
 
   } catch (err) {
