@@ -1,11 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwindcss/vite
 
-
-
-.head{
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #333;
+@theme{
+  --font-Roboto: Roboto, "sans-serif";
+  --font-Montserrat: Montserrat, "sans-serif";
+  --font-Poppins: Poppins, "sans-serif";
 }
+
+.no-scrollbar::-webkit-scrollbar{
+  display: none;
+}
+
+.no-scrollbar{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+

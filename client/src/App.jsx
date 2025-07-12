@@ -8,6 +8,10 @@ import { randomNickName } from './utils/randonNameGenerator.js';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import {uniqueDevice} from './hooks/uniqueDevice.js';
+import PosterForm from './components/admin/PosterForm.jsx'
+import Dashboard from './components/admin/Dashboard.jsx'
+import UserDashBoard from './components/admin/UserDashBoard.jsx';
+import VoucherDashBoard from './components/admin/VoucherDashBoard.jsx'
 
 
 function App() {
@@ -20,6 +24,10 @@ function App() {
         <Route path="/quiz/:posterId" element={<QuizPage />} />
         <Route path="/badge" element={<Badge />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/create-poster" element={<PosterForm/>} />
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/users" element={<UserDashBoard/>}/>
+        <Route path="/vouchers" element={<VoucherDashBoard/>} />
         <Route path="/result" element={
           <div>
             <h1>Quiz Result</h1>

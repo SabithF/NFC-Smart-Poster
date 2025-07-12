@@ -6,7 +6,7 @@ import { generateUserNumber } from '../utils/generateUserNumber.js';
 import Voucher from '../models/voucher.js'
 
 
-// 1. Handle NFC Scan
+//  Handle NFC Scan
 export const scanPoster = async (req, res) => {
   const { deviceId, posterId } = req.body;
 
@@ -85,7 +85,7 @@ export const scanPoster = async (req, res) => {
 };
 
 
-// 2. Handle Quiz Submission
+//  Handle Quiz Submission
 export const submitQuiz = async (req, res) => {
   const { deviceId, posterId, selectedAnswer } = req.body;
 
@@ -168,7 +168,7 @@ export const submitQuiz = async (req, res) => {
   }
 };
 
-// 3. Get User Progress
+//  Get User Progress
 export const getUserProgress = async (req, res) => {
   const { deviceId } = req.params;
   try {
@@ -186,7 +186,7 @@ export const getUserProgress = async (req, res) => {
   }
 };
 
-// 4. Get Leaderboard
+//  Get Leaderboard
 export const getLeaderboard = async (req, res) => {
   try {
     const topUsers = await User.find().sort({ scanCount: -1 }).limit(10);
@@ -203,19 +203,135 @@ export const getLeaderboard = async (req, res) => {
   }
 };
 
+// Create poster POST
+export const createPoster = async (req, res)=> {
+  const {posterId, question, options, correctAnswer, nextClue} = req.body
 
-// Delete a question
-
-export const deleteQuestion = async (req, res) => {
+  if (!posterId ||  !question  ||  !options ||  !correctAnswer ||  !nextClue){
+    return res.status(400).json({error: "Missing required fields"})
+  }
+ 
   try {
-    await Poster.deleteOne({ posterId: req.params.posterId });
-    res.status(200).json({ message: 'Question deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error deleting question' });
+    const newPoster = new Poster({posterId, question, options, correctAnswer, nextClue});
+    await newPoster.save();
+    res.status(201).json({message: "Poster created successfully", poster: newPoster})
 
+    
+  } catch (error) {
+    console.error("Error creating poster:", error);
+    res.status(500).json({error: "Server error while creating poster"})
+    
   }
 }
+
+// create vouchers
+export const createVouchers = async (req, res)=> {
+  const {voucherCode, expiryDate} = req.body
+
+  if (!voucherCode ||  !expiryDate ){
+    return res.status(400).json({error: "Missing required fields"})
+  }
+ 
+  try {
+    const newVoucher = new Voucher({voucherCode, expiryDate});
+    await newVoucher.save();
+    res.status(201).json({message: "Voucher created successfully", voucher: newVoucher})
+
+    
+  } catch (error) {
+    console.error("Error creating poster:", error);
+    res.status(500).json({error: "Server error while creating Vouchers"})
+    
+  }
+}
+
+// fetch all Posters 
+export const allPosters = async (req, res) => {
+  try {
+    const posters = await Poster.find();
+    res.status(200).json(posters);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: "Error fetching the posters"})
+  }
+}
+
+// fetch all the users
+export const allUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: "Something went wrong while fetching user details"});
+  }
+}
+
+
+// fetch all vouchers
+export const fetchVouchers = async (req, res) => {
+   try {
+    const vouchersAll= await Voucher.find()
+    res.status(200).json(vouchersAll);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: "Something went wrong while fetching vouchers"})
+    
+  }
+}
+ 
+
+// Delet posters 
+export const deletePoster = async (req, res) => {
+  try {
+    await Poster.deleteOne({posterId: req.params.posterId})
+    res.status(200).json({message: "Poster deleted successfully"})
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: "Error occured deleting posters"})
+  }
+}
+
+// Delete vouchers
+export const deleteVouchers = async (req, res) => {
+  try {
+    await Voucher.findByIdAndDelete(req.params.id)
+    res.status(200).json({message: "Voucher deleted successfully"})
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: "Error occured deleting posters"})
+  }
+}
+
+// update posters
+export const updatePosters = async (req, res) => {
+  try {
+    const {posterId} = req.params;
+
+    const updatedPoster = await Poster.findOneAndUpdate({
+      posterId
+    }, req.body, { new: true });
+    res.status(200).json(updatePosters);
+  } catch (error) {
+    res.status(500).json({error: "failed to update poster"})
+    
+  }
+}
+
+export const updateVouchers = async (req, res) => {
+  try {
+    const {id } = req.params;
+
+    const updatedVoucher = await Voucher.findByIdAndUpdate(id, req.body, {new:true})
+    res.status(200).json(updatedVoucher);
+  } catch (error) {
+    res.status(500).json({error: "failed to update vouchers"})
+  }
+}
+
 
 // Delete all question
 export const deleteAllQuestions = async (req, res) => {
