@@ -18,6 +18,12 @@ module.exports= {
         montserrat: ["Montserrat", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
         urbanist: ["Urbanist", "sans-serif"],
+        lucky: ["Luckiest Guy", "cursive"],
+        pressStart: ["Press Start 2P", "system-ui"],
+        sacramento: ["Sacramento", "cursive"],
+        vt323: [ "VT323", "monospac"]
+
+
       },
     },
   },

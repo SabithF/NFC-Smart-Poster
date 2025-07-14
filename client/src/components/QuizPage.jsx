@@ -11,6 +11,8 @@ import { GridBackground } from './other_components/GridBackground';
 import { Spotlight } from './other_components/spotlight';
 import MainPage from './MainPage.jsx';
 import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc';
+import Lottie from 'lottie-react';
+import coin from'../assets/coin.json';
 
 
 

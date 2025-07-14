@@ -106,7 +106,7 @@ function DockIcon({ children, className = "" }) {
   );
 }
 
-export default function Dock({
+export default function NavDoc({
   items,
   className = "",
   spring = { mass: 0.1, stiffness: 150, damping: 12 },
