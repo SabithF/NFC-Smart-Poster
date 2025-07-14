@@ -11,7 +11,8 @@ import {uniqueDevice} from './hooks/uniqueDevice.js';
 import PosterForm from './components/admin/PosterForm.jsx'
 import Dashboard from './components/admin/Dashboard.jsx'
 import UserDashBoard from './components/admin/UserDashBoard.jsx';
-import VoucherDashBoard from './components/admin/VoucherDashBoard.jsx'
+import VoucherDashBoard from './components/admin/VoucherDashBoard.jsx';
+import MainPage from './components/MainPage.jsx';
 
 
 function App() {
@@ -36,12 +37,7 @@ function App() {
             <p>Your Nickname: {nickName}</p>
           </div>
         } />
-        <Route path="/" element={
-          <div>
-            <h1>Welcome to the Poster Quiz App</h1>
-            <p>Please select a quiz from the available posters.</p>
-          </div>
-        } />
+        <Route path="/" element={<MainPage/> } />
          <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </Router>

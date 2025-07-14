@@ -39,7 +39,7 @@ export function UserProfile() {
             <div className="relative">
             <div className="w-16 h-16 rounded-full bg-gradient-to-r from-cyan-400 to-teal-400 p-1 animate-pulse">
                     <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
-                        <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center text-gray-900 font-bold">
+                        <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center text-gray-900 dark:text-white font-bold">
                             {nickName ? nickName.charAt(0).toUpperCase() : "?"}
                         </div>
                     </div>
@@ -53,8 +53,8 @@ export function UserProfile() {
             </div>
             {/* Username and details */}
             <div >
-                <h2 className="text-s font-bold lg:text-xl ">{nickName}</h2>
-                <p className="text-cyan-400">Scans: {scanCount}</p>
+                <h2 className=" font-bold dark:text-white lg:text-xl font-outfit">{nickName}</h2>
+                <p className="text-cyan-400 pb-2 font-montserrat">Scans: {scanCount}</p>
                 <div className="flex space-x-1">
                     {Array.from({ length: 5 }).map((_, index) => (
                 <svg key={index} className="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -66,9 +66,10 @@ export function UserProfile() {
         </div>
 
         {/* Score */}
-      <div className="flex flex-col justify-center items-center text-center bg-gradient-to-r from-green-500 to-teal-500 rounded-xl px-4 py-2 shadow-lg w-25 h-20 lg:w-25 lg:h-15">
-        <div className="text-xl font-bold text-gray-900">{totalPoints}</div>
-        <div className="text-xs opacity-90 text-gray-900">Total Points</div>
+      <div className="flex flex-col  text-center bg-gradient-to-r from-gray-500 to-teal-500 border ring-inherit ring-slate-300 border-gray-100/10
+      -white rounded-xl px-4 py-2 shadow-lg w-25 h-20 lg:w-25 lg:h-15">
+        <div className="text-xl font-bold font-montserrat text-yellow-500">{totalPoints}</div>
+        <div className="text-xs opacity-90 font-montserrat text-gray-300">Total Points</div>
       </div>
     </header>
   );

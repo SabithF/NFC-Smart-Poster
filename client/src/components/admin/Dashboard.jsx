@@ -72,7 +72,7 @@ const Dashboard = () => {
                 <div className="flex flex-col overflow-auto justify-center rounded-xl items-center bg-gray-800/10 mt-10 mx-20 shadow-transparent">
                     {/* title and button */}
                     <div className="flex w-full px-6 py-4 items-center justify-between">
-                        <div className="text-white font-semibold tracking-widest text-xl">
+                        <div className="text-white font-semibold tracking-widest  font-Poppins text-xl">
                             Poster Management
                         </div>
                         <button
