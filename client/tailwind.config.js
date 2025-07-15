@@ -25,7 +25,8 @@ module.exports= {
 
 
       },
+
     },
   },
-  plugins: [flowbitePlugin, scrollbarHide],
+  plugins: [flowbitePlugin, scrollbarHide, require("@designbycode/tailwindcss-text-stroke")], 
 };

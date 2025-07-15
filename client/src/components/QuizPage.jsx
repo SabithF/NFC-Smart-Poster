@@ -12,13 +12,18 @@ import { Spotlight } from './other_components/spotlight';
 import MainPage from './MainPage.jsx';
 import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc';
 import Lottie from 'lottie-react';
-import coin from'../assets/coin.json';
+import welcome from '../assets/Welcome.json'
+import { uniqueDevice } from '../hooks/uniqueDevice.js';
+import {TypewriterEffectSmootha} from './other_components/HeroText.jsx';
+
+
 
 
 
 
 
 function QuizPage() {
+  const {nickName} = uniqueDevice();
   const { posterId } = useParams();
   const navigate = useNavigate();
 
@@ -29,7 +34,7 @@ function QuizPage() {
   const [feedback, setFeedback] = useState('');
   const [showBadge, setShowBadge] = useState(false);
 
-   
+
 
 
   // Get deiviceId and scan the Poster
@@ -103,28 +108,19 @@ function QuizPage() {
         <div className="absolute inset-0 z-0">
           <GridBackground />
           <Spotlight />
-
-          <div className=""></div>
-
-        
-
-          
-
         </div>
 
         {/* Contents on top of the bg  */}
 
-        <div className="relative flex flex-col m-8 w-full h-full  ">
-          <div className="p-8 mr-18">
+        <div className="relative flex flex-col mt-8 w-full h-full  ">
+          <div className="p-2 mr-8">
             <UserProfile />
           </div>
-
-
-
-
+        <div className="relative flex flex-col  justify-center items-center h-[100] w-full">
+          <Lottie animationData={welcome} style={{ height: 300, width: 300 }} />
+          <TypewriterEffectSmootha nickName={nickName}/>
         </div>
-
-
+        </div>
 
       </section>
 
@@ -132,7 +128,7 @@ function QuizPage() {
       <section className='h-screen w-full relative bg-black overflow-hidden'>
 
 
-
+ 
 
 
 
@@ -155,7 +151,7 @@ function QuizPage() {
 
 
 
-          <ProductBanner />
+          {/* <ProductBanner /> */}
 
           {/* Quiz Card */}
 

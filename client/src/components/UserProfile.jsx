@@ -63,7 +63,7 @@ export function UserProfile() {
             <span className="font-lucky">Scans:</span>
             <Counter
               value={scanCount}
-              places={[100,10, 1]}
+              places={[100, 10, 1]}
               fontSize={15}
               padding={0}
               gap={6}
@@ -73,8 +73,8 @@ export function UserProfile() {
           </div>
 
 
-          
 
+        {/* Stars */}
           <div className="flex space-x-1">
             {Array.from({ length: 5 }).map((_, index) => (
               <svg key={index} className="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
@@ -89,11 +89,13 @@ export function UserProfile() {
 
       {/* Score */}
       <div className="flex flex-row items-center bg-gradient-to-r from-gray-500 to-teal-500 
-  ring-inherit ring-slate-300  border-gray-100/10 rounded-xl shadow-lg  ">
+          ring-inherit ring-slate-300  border-gray-100/10 rounded-xl shadow-lg  ">
         <div className="relative flex items-center justify-center -mr-5" style={{ top: "-15px" }}>
           <Lottie animationData={coin} style={{ width: 100, height: 100 }} />
         </div>
 
+
+            {/* Coin */}
         <div className="flex flex-col justify-end  items-center">
           <div className="flex flex-col justify-end font-lucky items-center">
             <Counter
