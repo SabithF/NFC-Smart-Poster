@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { scanPoster, submitQuiz } from '../api/posterApi';
+import { getUserProgress, scanPoster, submitQuiz } from '../api/posterApi';
 import { getDeviceId } from '../utils/fingerprint.js';
 import { UserProfile } from './UserProfile.jsx';
 import { QuizCard } from './QuizCard.jsx';
@@ -17,33 +17,32 @@ import { uniqueDevice } from '../hooks/uniqueDevice.js';
 import {TypewriterEffectSmootha} from './other_components/HeroText.jsx';
 
 
-
-
-
-
-
 function QuizPage() {
-  const {nickName} = uniqueDevice();
+  const {nickName, deviceId} = uniqueDevice();
   const { posterId } = useParams();
   const navigate = useNavigate();
 
-  const [deviceId, setDeviceId] = useState('');
+  // const [deviceIdd, setDeviceId] = useState('');
   const [questionData, setQuestionData] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState('');
   const [showBadge, setShowBadge] = useState(false);
+  const [welcomeMessage, setWelcomeMessage]  =  useState('Welcome');
 
 
 
 
   // Get deiviceId and scan the Poster
   useEffect(() => {
+    if (!deviceId) return;
+
     const init = async () => {
       try {
-        const id = await getDeviceId();
-        setDeviceId(id);
-        const qData = await scanPoster(id, posterId);
+        // const id = await getDeviceId();
+        // console.log("idddd", deviceId)
+        // setDeviceId(deviceId);
+        const qData = await scanPoster(deviceId, posterId);
 
         if (qData.question) {
           setQuestionData(qData);
@@ -61,8 +60,32 @@ function QuizPage() {
 
       }
     };
+   
     init();
-  }, [posterId]);
+   
+  }, [posterId, deviceId]);
+
+  useEffect(() => {
+  const handleWelcomeMessage = async () => {
+    if (!deviceId) return;
+
+    try {
+      const progress = await getUserProgress(deviceId);
+      console.log("Progress:", progress);
+
+      if (progress.scanCount > 0) {
+        setWelcomeMessage("Welcome Back");
+      }
+    } catch (error) {
+      console.error("Error fetching progress", error);
+    }
+  };
+
+  handleWelcomeMessage();
+}, [deviceId]);
+
+
+  
 
   // Handle answer submit
 
@@ -94,9 +117,9 @@ function QuizPage() {
   };
 
 
+
   if (error) return <div className="p-4 text-red-600">{error}</div>
   if (!questionData) return <div className="p-4">Loading Quiz...</div>;
-
 
   return (
 
@@ -114,11 +137,11 @@ function QuizPage() {
 
         <div className="relative flex flex-col mt-8 w-full h-full  ">
           <div className="p-2 mr-8">
-            <UserProfile />
+            <UserProfile/>
           </div>
         <div className="relative flex flex-col  justify-center items-center h-[100] w-full">
           <Lottie animationData={welcome} style={{ height: 300, width: 300 }} />
-          <TypewriterEffectSmootha nickName={nickName}/>
+          <TypewriterEffectSmootha nickName={nickName} message={welcomeMessage}/>
         </div>
         </div>
 

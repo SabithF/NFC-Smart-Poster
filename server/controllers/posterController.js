@@ -173,7 +173,7 @@ export const getUserProgress = async (req, res) => {
   const { deviceId } = req.params;
   try {
     const user = await User.findOne({ deviceId });
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) return res.status(404).json({ error: 'User not found GUP' });
 
     res.json({
       badges: user.badges,

@@ -6,11 +6,8 @@ import coin from '../assets/coin.json';
 import Lottie from "lottie-react";
 import { Counter } from "./other_components/Counter.jsx";
 
-
-
-
-
 export function UserProfile() {
+  
   const { deviceId, nickName } = uniqueDevice();
   const [scanCount, setScanCount] = useState(0);
   const [badgeCount, setBadgeCount] = useState(0);
@@ -33,7 +30,7 @@ export function UserProfile() {
   }, [deviceId])
 
   if (!deviceId || !nickName) {
-    return <div>Loading user profile...</div>;
+    return <div>Thinking a name for you...</div>;
   }
   const totalPoints = (scanCount * 100) + (badgeCount * 1000); // Placeholder for total points, can be dynamic based on user progress
 
