@@ -17,4 +17,16 @@
 }
 
 
+@font-face {
+  font-family: 'Boulder';
+  src: url('./assets/fonts/Boulder.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Brigada';
+  src: url('./assets/fonts/Brigada.otf') format('truetype');
+}
+
+
+
 

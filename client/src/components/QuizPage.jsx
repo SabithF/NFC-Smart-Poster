@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getUserProgress, scanPoster, submitQuiz } from '../api/posterApi';
 import { getDeviceId } from '../utils/fingerprint.js';
@@ -14,13 +14,18 @@ import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vs
 import Lottie from 'lottie-react';
 import welcome from '../assets/Welcome.json'
 import { uniqueDevice } from '../hooks/uniqueDevice.js';
-import {TypewriterEffectSmootha} from './other_components/HeroText.jsx';
+import { TypewriterEffectSmootha } from './other_components/HeroText.jsx';
+import CircularGallery from './other_components/CircularGallery.jsx'
+import Noise from './other_components/Noise.jsx'
+
 
 
 function QuizPage() {
-  const {nickName, deviceId} = uniqueDevice();
+  const { nickName, deviceId } = uniqueDevice();
   const { posterId } = useParams();
   const navigate = useNavigate();
+  const bannerSectionRef = useRef(null);
+  const heroSectionRef = useRef(null);
 
   // const [deviceIdd, setDeviceId] = useState('');
   const [questionData, setQuestionData] = useState(null);
@@ -28,10 +33,18 @@ function QuizPage() {
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState('');
   const [showBadge, setShowBadge] = useState(false);
-  const [welcomeMessage, setWelcomeMessage]  =  useState('Welcome');
+  const [welcomeMessage, setWelcomeMessage] = useState('Welcome');
 
 
 
+  const scrolltoBannerSection = () => {
+    bannerSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+
+  }
+  const scrollToHeroSection = () => {
+    heroSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+
+  }
 
   // Get deiviceId and scan the Poster
   useEffect(() => {
@@ -39,9 +52,7 @@ function QuizPage() {
 
     const init = async () => {
       try {
-        // const id = await getDeviceId();
-        // console.log("idddd", deviceId)
-        // setDeviceId(deviceId);
+
         const qData = await scanPoster(deviceId, posterId);
 
         if (qData.question) {
@@ -60,32 +71,32 @@ function QuizPage() {
 
       }
     };
-   
+
     init();
-   
+
   }, [posterId, deviceId]);
 
   useEffect(() => {
-  const handleWelcomeMessage = async () => {
-    if (!deviceId) return;
+    const handleWelcomeMessage = async () => {
+      if (!deviceId) return;
 
-    try {
-      const progress = await getUserProgress(deviceId);
-      console.log("Progress:", progress);
+      try {
+        const progress = await getUserProgress(deviceId);
+        console.log("Progress:", progress);
 
-      if (progress.scanCount > 0) {
-        setWelcomeMessage("Welcome Back");
+        if (progress.scanCount > 0) {
+          setWelcomeMessage("Welcome Back");
+        }
+      } catch (error) {
+        console.error("Error fetching progress", error);
       }
-    } catch (error) {
-      console.error("Error fetching progress", error);
-    }
-  };
+    };
 
-  handleWelcomeMessage();
-}, [deviceId]);
+    handleWelcomeMessage();
+  }, [deviceId]);
 
 
-  
+
 
   // Handle answer submit
 
@@ -124,8 +135,12 @@ function QuizPage() {
   return (
 
     <>
+
+
       {/* Hero */}
-      <section className='h-screen w-full relative overflow-hidden'>
+      <section
+        ref={heroSectionRef}
+        className='h-screen w-screen relative overflow-hidden'>
 
         {/* background layer */}
         <div className="absolute inset-0 z-0">
@@ -137,23 +152,57 @@ function QuizPage() {
 
         <div className="relative flex flex-col mt-8 w-full h-full  ">
           <div className="p-2 mr-8">
-            <UserProfile/>
+            <UserProfile />
           </div>
-        <div className="relative flex flex-col  justify-center items-center h-[100] w-full">
-          <Lottie animationData={welcome} style={{ height: 300, width: 300 }} />
-          <TypewriterEffectSmootha nickName={nickName} message={welcomeMessage}/>
-        </div>
+          <div className="relative flex flex-col  justify-center items-center h-[100] w-full">
+            <Lottie animationData={welcome} style={{ height: 300, width: 300 }} />
+            <TypewriterEffectSmootha
+              nickName={nickName}
+              message={welcomeMessage}
+              onPlayClick={scrolltoBannerSection} />
+          </div>
         </div>
 
       </section>
 
-      {/* Quiz card section */}
-      <section className='h-screen w-full relative bg-black overflow-hidden'>
+      {/* Banner section */}
+      <section
+        ref={bannerSectionRef}
+        className='h-screen w-screen flex flex-col justify-between items-center    bg-[#040414] overflow-hidden'>
 
 
- 
+        <div className='w-screen h-screen absolute' >
+          <Noise
+            patternSize={500}
+            patternScaleX={1}
+            patternScaleY={1}
+            patternRefreshInterval={2}
+            patternAlpha={15}
+          />
+        </div>
 
 
+        <div className="text-white justify-start text-center mt-10">
+          <h2 className='font-brigada text-sm  mb-2 shadow-3xl'> Welcome back </h2>
+          <h2 className='font-brigada text-3xl  mb-6 shadow-3xl'> <span className='text-yellow-500'> the Wait is over</span>
+            <br />are you ready?</h2>
+          <div className="flex flex-row justify-between w-70 mt-10">
+            <p className='font-brigada text-4xl   text-left  text-red-400  '>Summer <br /> 2025 <br />  <span className=' font-Boulder text-lg text-yellow-300'>Octagon hall,</span> <span className='text-white font-Boulder text-lg'>London</span> <br /></p>
+            <p className='font-brigada text-2xl  text-right text-blue-400  '>
+              24th <br /> Sunday, <br /> <span className='text-white text-lg'>AUG</span> <br />
+            </p>            
+          </div>
+        </div>
+        {/* <BannerCarousel /> */}
+          <div className='h-100 w-100  justify-center items-center md:w-screen'>
+            <div className="text-white text-center relative inset-y-15 font-brigada">Explore the experiences</div>
+            
+            <CircularGallery 
+            bend={1} 
+            textColor="#ffffff" 
+            borderRadius={0.05} 
+            scrollEase={0.15} />
+          </div>
 
 
 

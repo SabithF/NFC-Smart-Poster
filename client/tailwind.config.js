@@ -21,7 +21,9 @@ module.exports= {
         lucky: ["Luckiest Guy", "cursive"],
         pressStart: ["Press Start 2P", "system-ui"],
         sacramento: ["Sacramento", "cursive"],
-        vt323: [ "VT323", "monospac"]
+        vt323: [ "VT323", "monospac"],
+        Boulder: ["Boulder","sans-serif" ],
+        brigada: ["Brigada","sans-serif" ],
 
 
       },

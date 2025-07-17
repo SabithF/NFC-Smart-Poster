@@ -110,8 +110,8 @@ const VoucherDashBoard = () => {
                                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {voucher.voucherCode}
                                         </td>
-                                        <td className="px-6 py-4">{voucher.redeemedUsers}</td>
                                         <td className="px-6 py-4">{voucher.expiryDate}</td>
+                                        <td className="px-6 py-4">{voucher.redeemedUser}</td>
                                         <td className="px-6 py-4">
                                             <div className="flex gap-2 px-2 text-white">
                                                 <a

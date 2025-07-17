@@ -70,8 +70,8 @@ export function QuizCard({ questionData, selectedAnswer, setSelectedAnswer, feed
         disabled={selectedAnswer === null}
         className="w-full bg-gradient-to-r from-cyan-400 to-teal-400 text-gray-900 font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
       >
-        <div className="flex items-center justify-center space-x-2">
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <div className="flex mx-3  items-center justify-center space-x-2 bg-blue-600 rounded-full">
+          <svg className="w-4 h-15" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
           </svg>
           <span>Submit Answer</span>

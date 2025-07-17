@@ -94,11 +94,11 @@ return (
                                         <td className="px-6 py-4">{user.scanCount}</td>
                                         <td className="px-6 py-4">
                                             {user.voucherUnlocked ? (
-                                                <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-900/50 border rounded-full">
+                                                <span className="px-3 py-1 text-xs font-semibold text-white bg-green-900/50 border border-white/20 rounded-full">
                                                     Unlocked
                                                 </span>
                                             ):(
-                                                <span className="px-3 py-1 text-xs font-semibold text-red-700 bg-red-900/40 rounded-full">
+                                                <span className="px-3 py-1 text-xs font-semibold text-white/40 bg-red-900/40 rounded-full">
                                                     Locked
                                                 </span>
                                             )}
