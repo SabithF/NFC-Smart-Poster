@@ -27,6 +27,51 @@
   src: url('./assets/fonts/Brigada.otf') format('truetype');
 }
 
+@font-face {
+  font-family: 'beyond';
+  src: url('./assets/fonts/beyond.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Durango';
+  src: url('./assets/fonts/Durango.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'gyoza';
+  src: url('./assets/fonts/gyoza.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'kerod';
+  src: url('./assets/fonts/kerod.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'midorima';
+  src: url('./assets/fonts/midorima.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'mike';
+  src: url('./assets/fonts/mike.otf') format('truetype');
+}
+@font-face {
+  font-family: 'noctaOutline';
+  src: url('./assets/fonts/NoctraDrip-OutlineMelt.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'noctaSolid';
+  src: url('./assets/fonts/NoctraDrip-SolidMelt.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'pcme';
+  src: url('./assets/fonts/Pcme.otf') format('truetype');
+}
+@font-face {
+  font-family: 'rengkox';
+  src: url('./assets/fonts/rengkox.otf') format('truetype');
+}
+
 
 
 

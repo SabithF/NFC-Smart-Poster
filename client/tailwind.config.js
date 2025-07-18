@@ -24,6 +24,16 @@ module.exports= {
         vt323: [ "VT323", "monospac"],
         Boulder: ["Boulder","sans-serif" ],
         brigada: ["Brigada","sans-serif" ],
+        beyond: ["beyond","sans-serif" ],
+        Durango: ["Durango","sans-serif" ],
+        gyoza: ["gyoza","sans-serif" ],
+        kerod: ["kerod","sans-serif" ],
+        midorima: ["midorima","sans-serif" ],
+        mike: ["mike","sans-serif" ],
+        noctaOutline: ["noctaOutline","sans-serif" ],
+        noctaSolid: ["noctaSolid","sans-serif" ],
+        pcme: ["pcme","sans-serif" ],
+        rengkox: ["rengkox","sans-serif" ],
 
 
       },
