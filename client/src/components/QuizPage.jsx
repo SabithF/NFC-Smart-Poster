@@ -21,6 +21,7 @@ import Playbutton from '../assets/play-button.json';
 
 
 
+
 function QuizPage() {
   const { nickName, deviceId } = uniqueDevice();
   const { posterId } = useParams();
@@ -35,6 +36,10 @@ function QuizPage() {
   const [feedback, setFeedback] = useState('');
   const [showBadge, setShowBadge] = useState(false);
   const [welcomeMessage, setWelcomeMessage] = useState('Welcome');
+  const [scanCount, setScanCount] = useState(0);
+  const [badgeCount, setBadgeCount] = useState(0);
+  const [userPoints, setUserPointes] = useState(0);
+
 
 
 
@@ -58,6 +63,7 @@ function QuizPage() {
 
         if (qData.question) {
           setQuestionData(qData);
+
         } else if (qData.message) {
           setError(qData.message);
         } else {
@@ -83,9 +89,15 @@ function QuizPage() {
 
       try {
         const progress = await getUserProgress(deviceId);
-        console.log("Progress:", progress);
+        const scans = progress?.scanCount || 0
+        const badges = progress?.badges?.length || 0
+        setScanCount(scans);
+        setBadgeCount(badges)
 
-        if (progress.scanCount > 0) {
+
+
+
+        if (scans > 0) {
           setWelcomeMessage("Welcome Back");
         }
       } catch (error) {
@@ -94,7 +106,13 @@ function QuizPage() {
     };
 
     handleWelcomeMessage();
+
   }, [deviceId]);
+
+  useEffect(() => {
+    const points = (scanCount * 100) + (badgeCount * 1000);
+    setUserPointes(points);
+  }, [scanCount, badgeCount])
 
 
 
@@ -129,7 +147,6 @@ function QuizPage() {
   };
 
 
-
   if (error) return <div className="p-4 text-red-600">{error}</div>
   if (!questionData) return <div className="p-4">Loading Quiz...</div>;
 
@@ -155,7 +172,7 @@ function QuizPage() {
 
         </div>
 
-        <div className="flex flex-col h-screen justify-center items-center border">
+        <div className="flex flex-col h-screen justify-center items-center">
 
 
           <div className="text-white text-center mt-10">
@@ -164,48 +181,38 @@ function QuizPage() {
             <TypewriterEffectSmootha
               nickName={nickName}
 
-            />           
-            
+            />
+
           </div>
 
           {/* progress */}
-           <div className="font-lucky flex flex-col text-white text-center mt-5">
+          <div className="font-lucky flex flex-col text-white text-center mt-5">
 
-              <p className='text-lg text-blue-300'>----- Progress -----</p>
-              
+            <p className='text-lg text-blue-300'>----- Progress -----</p>
 
-              {/* progress menu */}
-              <div className="flex flex-row  justify-between">
 
-                {/* scans */}
-                <div className="flex items-center text-yellow-400  justify-center flex-col  w-22 mt-3 mx-2 p-3 border rounded-lg border-white/40 drop-shadow-lg">
-                  <p>SCANS</p>
-                  <p className='text-white'>100</p>
-                </div>
-                <div className="flex items-center text-yellow-400 justify-center flex-col  w-22 mt-3 mx-2 p-3 border rounded-lg border-white/40 drop-shadow-lg">
-                  <p>Points</p>
-                  <p className='text-white'>100</p>
-                </div>
-                <div className="flex items-center text-yellow-400 justify-center flex-col  w-22 mt-3 mx-2 p-3 border rounded-lg border-white/40 drop-shadow-lg">
-                  <p>Position</p>
-                  <p className='text-white'>100</p>
-                </div>
-              </div>
+            {/* progress menu */}
+            <div className="flex flex-row  justify-between">
 
-              <div className="text-white mt-3">Progress bar</div>
-
+              {/* scans */}
+             
             </div>
 
-           <div className="w-55 mt-6 cursor-pointer motion-safe:animate-bounce"
-                    onClick={scrolltoBannerSection}>
-                    <Lottie animationData={Playbutton} />
-                </div>
+            <UserProfile />
+           
+
+          </div>
+
+          <div className="w-55 mt-6 cursor-pointer motion-safe:animate-bounce"
+            onClick={scrolltoBannerSection}>
+            <Lottie animationData={Playbutton} />
+          </div>
 
 
-           <div className="text-white text-center pt-5 mt-5 mx-15">
-            Experience Reading Festival 2025 – our best year yet with a huge site transformation, 
+          <div className="text-white text-center pt-5 mt-5 mx-15">
+            Experience Reading Festival 2025 – our best year yet with a huge site transformation,
             over 100 live acts, and the UK’s largest community of music lovers.
-           </div>
+          </div>
 
         </div>
 
@@ -274,7 +281,7 @@ function QuizPage() {
 
         <div className="relative flex flex-col mt-8 w-full h-full  ">
           <div className="p-2 mr-8">
-            <UserProfile />
+            {/* <UserProfile /> */}
           </div>
           <div className="relative flex flex-col  justify-center items-center h-[100] w-full">
             <Lottie animationData={welcome} style={{ height: 300, width: 300 }} />

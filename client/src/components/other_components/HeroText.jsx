@@ -29,8 +29,6 @@ export function TypewriterEffectSmootha({ nickName, message, onPlayClick }) {
                 </div> */}
 
                 
-                {/* <button className="w-40 h-10 font-bold rounded-xl dark:bg-green-500 text-stroke  text-white border border-white  text-sm"> 
-                    Concert</button> */}
 
             </div>
 
