@@ -7,6 +7,7 @@ import Lottie from "lottie-react";
 import { Counter } from "./other_components/Counter.jsx";
 import {AnimatedProgressBar} from './other_components/ProgressBar.jsx'
 
+
 export function UserProfile() {
 
   const { deviceId, nickName } = uniqueDevice();
@@ -37,12 +38,12 @@ export function UserProfile() {
   const totalPoints = (scanCount * 100) + (badgeCount * 1000); // Placeholder for total points, can be dynamic based on user progress
 
   return (
-    <header className="flex flex-col items-center justify-between mb-8">
+    <header className="flex flex-col items-center justify-between mb-3">
 
       <div className="flex flex-row  justify-between">
 
         {/* scans */}
-        <div className="flex items-center text-yellow-400  justify-center flex-col  w-22 mt-3 mx-2 p-3 border rounded-lg border-white/40 drop-shadow-lg">
+        <div className="flex items-center text-yellow-400  justify-center flex-col  w-19 mt-3 mx-1 p-2 border rounded-lg border-white/40 drop-shadow-lg">
           <p>SCANS</p>
 
           <p className='text-white'>
@@ -55,7 +56,7 @@ export function UserProfile() {
               textColor="white"
               fontWeight={500} /></p>
         </div>
-        <div className="flex items-center text-yellow-400 justify-center flex-col  w-22 mt-3 mx-2 p-3 border rounded-lg border-white/40 drop-shadow-lg">
+        <div className="flex items-center text-yellow-400 justify-center flex-col  w-19 mt-3 mx-1 p-2 border rounded-lg border-white/40 drop-shadow-lg">
           <p>Points</p>
           <p className='text-white'>
 
@@ -70,7 +71,7 @@ export function UserProfile() {
               fontWeight={500} />
           </p>
         </div>
-        <div className="flex items-center text-yellow-400 justify-center flex-col  w-22 mt-3 mx-2 p-3 border rounded-lg border-white/40 drop-shadow-lg">
+        <div className="flex items-center text-yellow-400 justify-center flex-col  w-19 mt-3 mx-1 p-2 border rounded-lg border-white/40 drop-shadow-lg">
           <p>Badges</p>
           <p className='text-white'>
             <Counter
@@ -95,12 +96,12 @@ export function UserProfile() {
 
       
       {/* <progress className="rounded-full mt-10" value={badgeCount/5}  /> */}
-       <div className="w-60 p-4 max-w-md mx-auto text-white">
+       <div className="w-50 max-w-md mt-4 text-white">
       <AnimatedProgressBar
         value={badgeCount}
         max={maxScans}
         label={`Scans: ${badgeCount} / ${maxScans}`}
-        color="#3B82F6" // Tailwind blue-500
+        color="#3B82F6"
         height={18}
       />
     </div>

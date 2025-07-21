@@ -72,6 +72,11 @@
   src: url('./assets/fonts/rengkox.otf') format('truetype');
 }
 
+@font-face {
+  font-family: 'newton';
+  src: url('./assets/fonts/Newton.otf') format('truetype');
+}
+
 
 
 

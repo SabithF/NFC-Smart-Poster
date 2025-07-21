@@ -172,11 +172,17 @@ function QuizPage() {
 
         </div>
 
-        <div className="flex flex-col h-screen justify-center items-center">
+        <div className="flex flex-col h-screen justify-center items-center my-5">
+
+          <h2 className='font-newton  text-xl  text-center 
+          inline-block text-transparent bg-clip-text
+          
+          bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400  '>
+            Music <br /> Festival</h2>
 
 
-          <div className="text-white text-center mt-10">
-            <h2 className='font-brigada text-xl  mb-2 shadow-3xl'>
+          <div className="text-white text-center mt-5 shadow-2xl">
+            <h2 className='font-brigada text-xl  mb-1 shadow-3xl'>
               {welcomeMessage} </h2>
             <TypewriterEffectSmootha
               nickName={nickName}
@@ -186,7 +192,7 @@ function QuizPage() {
           </div>
 
           {/* progress */}
-          <div className="font-lucky flex flex-col text-white text-center mt-5">
+          <div className="font-lucky flex flex-col text-white text-center ">
 
             <p className='text-lg text-blue-300'>----- Progress -----</p>
 
@@ -237,7 +243,7 @@ function QuizPage() {
 
 
         <div className="text-white justify-start text-center mt-10">
-          <h2 className='font-brigada text-sm  mb-2 shadow-3xl'> Welcome back </h2>
+          {/* <h2 className='font-brigada text-sm  mb-2 shadow-3xl'> Welcome back </h2> */}
           <h2 className='font-brigada text-3xl  mb-6 shadow-3xl'> <span className='text-yellow-500'> the Wait is over</span>
             <br />are you ready?</h2>
           <div className="flex flex-row justify-between w-70 mt-10">

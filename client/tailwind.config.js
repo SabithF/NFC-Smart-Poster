@@ -34,6 +34,7 @@ module.exports= {
         noctaSolid: ["noctaSolid","sans-serif" ],
         pcme: ["pcme","sans-serif" ],
         rengkox: ["rengkox","sans-serif" ],
+        newton: ["newton","sans-serif" ],
 
 
       },
