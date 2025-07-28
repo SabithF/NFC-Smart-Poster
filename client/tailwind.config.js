@@ -38,6 +38,21 @@ module.exports= {
 
 
       },
+       dropShadow: {
+        glow: '0 0 6px rgba(34,211,238,0.8)',
+      },
+      animation: {
+        flicker: 'flicker 1.5s infinite alternate',
+      },
+      keyframes: {
+        flicker: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
+      },
+
+
+
 
     },
   },

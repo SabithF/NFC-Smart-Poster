@@ -27,9 +27,9 @@ export function AnimatedProgressBar({
     if (percentage >= 20 && percentage <= 40) {
       setProgressMessage("Nice one! Keep scanning");
     } else if (percentage > 40 && percentage <= 60) {
-      setProgressMessage("Halfway there! Your fan power is building");
+      setProgressMessage("Halfway there! ");
     } else if (percentage > 60 && percentage <= 80) {
-      setProgressMessage("One more to go! Can you hear the crowd cheering?");
+      setProgressMessage("One more to go!");
     } else if (percentage > 80 && percentage <= 100) {
       setProgressMessage("You did it..");
     }

@@ -35,7 +35,7 @@ export function UserProfile() {
   if (!deviceId || !nickName) {
     return <div>Loding progress....</div>;
   }
-  const totalPoints = (scanCount * 100) + (badgeCount * 1000); // Placeholder for total points, can be dynamic based on user progress
+  const totalPoints = (scanCount * 100) + (badgeCount * 1000); 
 
   return (
     <header className="flex flex-col items-center justify-between mb-3">
@@ -43,18 +43,22 @@ export function UserProfile() {
       <div className="flex flex-row  justify-between">
 
         {/* scans */}
-        <div className="flex items-center text-yellow-400  justify-center flex-col  w-19 mt-3 mx-1 p-2 border rounded-lg border-white/40 drop-shadow-lg">
+        <div className="flex items-center text-yellow-400  justify-center flex-col
+          w-19 mt-3 mx-1 p-2 border rounded-lg border-white/40 drop-shadow-lg">
           <p>SCANS</p>
 
-          <p className='text-white'>
-            <Counter
+          <p className='text-white '>
+            <div className=" h-auto overflow-y-hidden ">
+              <Counter
               value={scanCount}
               places={[100, 10, 1]}
               fontSize={15}
-              padding={0}
+              
+              padding={2}
               gap={6}
               textColor="white"
-              fontWeight={500} /></p>
+              fontWeight={500} />
+              </div></p>
         </div>
         <div className="flex items-center text-yellow-400 justify-center flex-col  w-19 mt-3 mx-1 p-2 border rounded-lg border-white/40 drop-shadow-lg">
           <p>Points</p>
@@ -65,7 +69,7 @@ export function UserProfile() {
               value={totalPoints}
               places={[1000, 100, 10, 1]}
               fontSize={15}
-              padding={0}
+              padding={2}
               gap={6}
               textColor="white"
               fontWeight={500} />
@@ -78,7 +82,7 @@ export function UserProfile() {
               value={badgeCount}
               places={[10, 1]}
               fontSize={15}
-              padding={0}
+              padding={2}
               gap={6}
               textColor="white"
               fontWeight={500} />

@@ -18,13 +18,12 @@ export const scanPoster = async (req, res) => {
   }
 
   // Get the user's IP address
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-  if (ip && ip.startsWith('::ffff:')) {
-    ip= ip.replace('::ffff:', ''); // Normalize IPv4-mapped IPv6 addresses
-        }
+  const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const ip = rawIp?.startsWith('::ffff:') ? rawIp.replace('::ffff:', '') : rawIp;
+
 
   try {
-    let user = await User.findOne({ $or : [{deviceId}, {deviceIp: ip}] });
+    let user = await User.findOne({ $or: [{ deviceId }, { deviceIp: ip }] });
 
     console.log('🔍 User found:', user);
 
@@ -47,7 +46,7 @@ export const scanPoster = async (req, res) => {
       await user.save();
       console.log('✅ User saved to DB:', user);
     } else {
-      if (!user.scannedPosters?.includes(posterId)){
+      if (!user.scannedPosters?.includes(posterId)) {
         user.scannedPosters.push(posterId);
         console.log('📌 Poster added to user:', posterId);
       }
@@ -57,7 +56,7 @@ export const scanPoster = async (req, res) => {
       return res.status(400).json({ message: 'Poster already scanned.' });
     }
 
-    if (!user.scannedPosters.includes(posterId)){
+    if (!user.scannedPosters.includes(posterId)) {
       user.scannedPosters.push(posterId);
     }
 
@@ -120,38 +119,38 @@ export const submitQuiz = async (req, res) => {
     let userVoucherCode = null;
 
     const allVouchers = await Voucher.find()
-    console.log("All vouchers",allVouchers)
-    
+    console.log("All vouchers", allVouchers)
+
     if (user.voucherUnlocked) {
-    const voucher = await Voucher.findOne({
-       expiryDate: { $gt: new Date() }, 
-     redeemedUsers: {$ne: user._id} 
+      const voucher = await Voucher.findOne({
+        expiryDate: { $gt: new Date() },
+        redeemedUsers: { $ne: user._id }
 
-    });
+      });
 
-     
 
-  if (voucher) {
-    userVoucherCode = voucher.voucherCode;
-    console.log('🎟️ Voucher found:', voucher.voucherCode);
-    console.log('👤 User ID:', user._id);
-    console.log('📜 Already redeemed:', voucher.redeemedUsers);
 
-    // const alreadyRedeemed = voucher.redeemedUsers.some(id => String(id) === String(user._id));
-    const alreadyRedeemed = voucher.redeemedUsers.includes(user._id)
+      if (voucher) {
+        userVoucherCode = voucher.voucherCode;
+        console.log('🎟️ Voucher found:', voucher.voucherCode);
+        console.log('👤 User ID:', user._id);
+        console.log('📜 Already redeemed:', voucher.redeemedUsers);
 
-    if (!alreadyRedeemed) {
-      console.log("🆕 Pushing user._id to voucher:", user._id);
-      voucher.redeemedUsers.push(user._id);
-      await voucher.save();
+        // const alreadyRedeemed = voucher.redeemedUsers.some(id => String(id) === String(user._id));
+        const alreadyRedeemed = voucher.redeemedUsers.includes(user._id)
 
-    } else {
-      console.log("✅ User already in redeemed list.");
+        if (!alreadyRedeemed) {
+          console.log("🆕 Pushing user._id to voucher:", user._id);
+          voucher.redeemedUsers.push(user._id);
+          await voucher.save();
+
+        } else {
+          console.log("✅ User already in redeemed list.");
+        }
+      } else {
+        console.log("⚠️ No voucher found or expired.");
+      }
     }
-  } else {
-    console.log("⚠️ No voucher found or expired.");
-  }
-}
     res.json({
       correct: true,
       clue: poster.clue,
@@ -159,7 +158,7 @@ export const submitQuiz = async (req, res) => {
       voucherUnlocked: user.voucherUnlocked,
       voucherCode: userVoucherCode,
 
-      
+
     });
 
   } catch (err) {
@@ -204,44 +203,44 @@ export const getLeaderboard = async (req, res) => {
 };
 
 // Create poster POST
-export const createPoster = async (req, res)=> {
-  const {posterId, question, options, correctAnswer, nextClue} = req.body
+export const createPoster = async (req, res) => {
+  const { posterId, question, options, correctAnswer, nextClue } = req.body
 
-  if (!posterId ||  !question  ||  !options ||  !correctAnswer ||  !nextClue){
-    return res.status(400).json({error: "Missing required fields"})
+  if (!posterId || !question || !options || !correctAnswer || !nextClue) {
+    return res.status(400).json({ error: "Missing required fields" })
   }
- 
-  try {
-    const newPoster = new Poster({posterId, question, options, correctAnswer, nextClue});
-    await newPoster.save();
-    res.status(201).json({message: "Poster created successfully", poster: newPoster})
 
-    
+  try {
+    const newPoster = new Poster({ posterId, question, options, correctAnswer, nextClue });
+    await newPoster.save();
+    res.status(201).json({ message: "Poster created successfully", poster: newPoster })
+
+
   } catch (error) {
     console.error("Error creating poster:", error);
-    res.status(500).json({error: "Server error while creating poster"})
-    
+    res.status(500).json({ error: "Server error while creating poster" })
+
   }
 }
 
 // create vouchers
-export const createVouchers = async (req, res)=> {
-  const {voucherCode, expiryDate} = req.body
+export const createVouchers = async (req, res) => {
+  const { voucherCode, expiryDate } = req.body
 
-  if (!voucherCode ||  !expiryDate ){
-    return res.status(400).json({error: "Missing required fields"})
+  if (!voucherCode || !expiryDate) {
+    return res.status(400).json({ error: "Missing required fields" })
   }
- 
-  try {
-    const newVoucher = new Voucher({voucherCode, expiryDate});
-    await newVoucher.save();
-    res.status(201).json({message: "Voucher created successfully", voucher: newVoucher})
 
-    
+  try {
+    const newVoucher = new Voucher({ voucherCode, expiryDate });
+    await newVoucher.save();
+    res.status(201).json({ message: "Voucher created successfully", voucher: newVoucher })
+
+
   } catch (error) {
     console.error("Error creating poster:", error);
-    res.status(500).json({error: "Server error while creating Vouchers"})
-    
+    res.status(500).json({ error: "Server error while creating Vouchers" })
+
   }
 }
 
@@ -253,7 +252,7 @@ export const allPosters = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Error fetching the posters"})
+    res.status(500).json({ error: "Error fetching the posters" })
   }
 }
 
@@ -266,32 +265,32 @@ export const allUsers = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Something went wrong while fetching user details"});
+    res.status(500).json({ error: "Something went wrong while fetching user details" });
   }
 }
 
 
 // fetch all vouchers
 export const fetchVouchers = async (req, res) => {
-   try {
-    const vouchersAll= await Voucher.find()
+  try {
+    const vouchersAll = await Voucher.find()
     res.status(200).json(vouchersAll);
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Something went wrong while fetching vouchers"})
-    
+    res.status(500).json({ error: "Something went wrong while fetching vouchers" })
+
   }
 }
- 
+
 
 // Delet posters 
 export const deletePoster = async (req, res) => {
   try {
-    await Poster.deleteOne({posterId: req.params.posterId})
-    res.status(200).json({message: "Poster deleted successfully"})
+    await Poster.deleteOne({ posterId: req.params.posterId })
+    res.status(200).json({ message: "Poster deleted successfully" })
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Error occured deleting posters"})
+    res.status(500).json({ error: "Error occured deleting posters" })
   }
 }
 
@@ -299,36 +298,36 @@ export const deletePoster = async (req, res) => {
 export const deleteVouchers = async (req, res) => {
   try {
     await Voucher.findByIdAndDelete(req.params.id)
-    res.status(200).json({message: "Voucher deleted successfully"})
+    res.status(200).json({ message: "Voucher deleted successfully" })
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Error occured deleting posters"})
+    res.status(500).json({ error: "Error occured deleting posters" })
   }
 }
 
 // update posters
 export const updatePosters = async (req, res) => {
   try {
-    const {posterId} = req.params;
+    const { posterId } = req.params;
 
     const updatedPoster = await Poster.findOneAndUpdate({
       posterId
     }, req.body, { new: true });
     res.status(200).json(updatePosters);
   } catch (error) {
-    res.status(500).json({error: "failed to update poster"})
-    
+    res.status(500).json({ error: "failed to update poster" })
+
   }
 }
 
 export const updateVouchers = async (req, res) => {
   try {
-    const {id } = req.params;
+    const { id } = req.params;
 
-    const updatedVoucher = await Voucher.findByIdAndUpdate(id, req.body, {new:true})
+    const updatedVoucher = await Voucher.findByIdAndUpdate(id, req.body, { new: true })
     res.status(200).json(updatedVoucher);
   } catch (error) {
-    res.status(500).json({error: "failed to update vouchers"})
+    res.status(500).json({ error: "failed to update vouchers" })
   }
 }
 

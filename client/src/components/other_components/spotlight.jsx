@@ -19,7 +19,7 @@ export const Spotlight = ({
         opacity: 0,
       }}
       animate={{
-        opacity: 3,
+        opacity: 1,
       }}
       transition={{
         duration: 2,

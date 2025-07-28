@@ -21,7 +21,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
     "flowbite": "^3.1.2",
-    "framer-motion": "^12.23.5",
+    "framer-motion": "^12.23.9",
     "lottie-react": "^2.4.1",
     "motion": "^12.23.3",
     "ogl": "^1.0.11",
