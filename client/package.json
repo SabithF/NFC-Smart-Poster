@@ -16,6 +16,7 @@
     "@fingerprintjs/fingerprintjs": "^4.6.2",
     "@fingerprintjs/fingerprintjs-pro": "^3.11.10",
     "@tabler/icons-react": "^3.34.0",
+    "@tailwindcss/typography": "^0.5.16",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
     "clsx": "^2.1.1",

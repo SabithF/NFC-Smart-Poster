@@ -10,5 +10,22 @@
          active:border-r-green-300 active:border-b-green-300
          transition-all duration-150"
 >
-  Retro Button
+  Let's explore
 </button>
+
+
+{/* <div className="flex justify-center mt-4">
+                    <button
+                      onClick={() => setShowQuizCard(false)}
+                      className="
+      relative px-5 py-2 font-lucky text-white text-2xl  uppercase
+      bg-gradient-to-b from-red-500 to-red-800
+      border-4 border-red-300 rounded-full
+      shadow-[0_4px_0_#7f1d1d,0_2px_4px_rgba(0,0,0,0.5)]
+      transition-transform active:translate-y-1 active:shadow-none
+      hover:brightness-110
+    "
+                    >
+                      ✖
+                    </button>
+                  </div> */}

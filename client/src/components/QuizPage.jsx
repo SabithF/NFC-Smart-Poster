@@ -33,6 +33,9 @@ function QuizPage() {
   const navigate = useNavigate();
   const bannerSectionRef = useRef(null);
   const heroSectionRef = useRef(null);
+  const gameSectionRef = useRef(null);
+  const badgeSectionRef = useRef(null);
+  const LeaderBoardSecRef = useRef(null);
 
   // const [deviceIdd, setDeviceId] = useState('');
   const [questionData, setQuestionData] = useState(null);
@@ -45,6 +48,9 @@ function QuizPage() {
   const [badgeCount, setBadgeCount] = useState(0);
   const [userPoints, setUserPointes] = useState(0);
   const [showQuizCard, setShowQuizCard] = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [isLoadingGame, setIsLoadingGame] = useState(false);
+
 
 
 
@@ -147,24 +153,19 @@ function QuizPage() {
 
     try {
       const result = await submitQuiz(deviceId, posterId, selectedAnswer);
-      if (result.correct) {
-        navigate('/', {
-          state: {
-            clue: result.clue,
-            badges: result.badges,
-            voucherUnlocked: result.voucherUnlocked,
 
-          }
-        });
+      if (result.correct) {
+        // ✅ Show congratulations popup only
+        setShowCongrats(true);
       } else {
         setFeedback(result.message || "Wrong answer, Try again!");
       }
     } catch (error) {
       console.error("Error submitting quiz:", error);
       setFeedback("Failed to submit answer. Please try again later.");
-
     }
   };
+
 
 
   if (error) return <div className="p-4 text-red-600">{error}</div>
@@ -197,7 +198,7 @@ function QuizPage() {
 
         <div className="flex flex-col h-screen justify-center items-center my-5">
 
-          <h2 className='font-newton  text-4xl  text-center 
+          <h2 className='font-brigada  text-4xl  text-center 
           inline-block text-transparent bg-clip-text
           
           bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400  '>
@@ -231,6 +232,8 @@ function QuizPage() {
 
           </div>
 
+
+
           <div className="w-55 mt-3 cursor-pointer motion-safe:animate-bounce"
             onClick={scrolltoBannerSection}>
             <Lottie animationData={Playbutton} />
@@ -248,6 +251,7 @@ function QuizPage() {
 
       </section>
 
+      {/* Second music screen */}
       <section
         ref={bannerSectionRef}
         className='h-screen w-screen flex flex-col justify-center items-center    bg-[#040414] overflow-hidden'>
@@ -264,7 +268,7 @@ function QuizPage() {
         </div>
 
 
-        <div className="text-white justify-start text-center mt-10">
+        <div className="text-white justify-start text-center mt-2">
           <div className="flex flex-row items-center justify-center mb-3">
             <StarIcon className="w-6" />
             <StarIcon className="w-6" />
@@ -275,10 +279,10 @@ function QuizPage() {
           </div>
           {/* <h2 className='font-brigada text-sm  mb-2 shadow-3xl'> Welcome back </h2> */}
 
-          <h2 className='font-brigada text-3xl  mb-6 shadow-3xl'> <span className='text-yellow-500'> the Wait is over</span>
+          <h2 className='font-brigada text-3xl  mb-3 shadow-3xl'> <span className='text-yellow-500'> the Wait is over</span>
             <br />are you ready?</h2>
 
-          <div className="flex flex-row justify-between w-70 mt-10">
+          <div className="flex flex-row justify-between w-70 mt-2">
             <p className='font-brigada text-4xl   text-left  text-red-400  '>Summer <br /> 2025 <br />
               <span className="inline-flex gap-1 items-baseline">
                 <span className=" font-brigada text-lg text-yellow-300">Octagon Hall,  <span className="text-white font-Boulder text-lg">London</span></span>
@@ -290,6 +294,23 @@ function QuizPage() {
             </p>
           </div>
         </div>
+        <div className="w-55 mt-3 cursor-pointer"
+          onClick={() => {
+            setIsLoadingGame(true);
+            setTimeout(() => {
+              setIsLoadingGame(false);
+              gameSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 2500); // delay of 1.5 seconds
+          }}>
+          <Lottie animationData={Playbutton} />
+        </div>
+
+        {isLoadingGame && (
+          <div className="text-white font-bold text-lg mt-4 animate-pulse">
+            Loading Playground...
+          </div>
+        )}
+
         {/* <BannerCarousel /> */}
         <div className='h-100 w-100   justify-center items-center md:w-screen'>
           <div className="text-white text-center relative inset-y-15 font-brigada">
@@ -310,16 +331,12 @@ function QuizPage() {
 
 
 
-      {/* Game zone --------------------------*/}
+      {/* Game zone ---------------------------------------------------------------------------------------------------------------------------------------------*/}
       <section
-        ref={heroSectionRef}
+        ref={gameSectionRef}
         className='h-screen w-screen relative overflow-hidden bg-[url(/assets/img/gm-bg-2.jpg)]  bg-cover bg-center bg-blend-multiply '>
 
         <div className="absolute inset-0 bg-black/75 z-0" />
-
-
-
-
         {/* background layer */}
         <div className="absolute inset-0 z-0">
           {/* <GridBackground /> */}
@@ -418,13 +435,7 @@ function QuizPage() {
             <AnimatePresence>
               {showQuizCard && (
 
-                <div
-
-
-
-
-
-                  className="fixed  bottom-0 left-0 w-full h-full bg-black/20 backdrop-blur-lg bg-blur-md z-50 flex justify-center items-start pt-10 overflow-y-auto">
+                <div className="fixed  bottom-0 left-0 w-full h-full bg-black/20 backdrop-blur-lg bg-blur-md z-50 flex justify-center items-start pt-10 overflow-y-auto">
                   <motion.div className="w-full max-w-2xl px-4"
 
                     key="quiz-card"
@@ -477,6 +488,85 @@ function QuizPage() {
       </section>
 
 
+      {/* Congratulation pop-up */}
+      {/* {showCongrats && ( */}
+      <section className=" fixed inset-0 z-[999] flex  justify-center items-center bg-black/70 backdrop-blur-lg ">
+
+        <div className="relative flex flex-col h-[90%] w-[90%] mx-3 py-2 px-2  rounded-3xl shadow-2xl drop-shadow-lg border 
+           ">
+          {/* bg-gradient-to-br from-yellow-300 to-orange-500 border-[0.5px] border-yellow-500 */}
+
+          {/* Background Image + Overlay */}
+          <div className="absolute inset-0 bg-[url(/assets/img/gm-bg-2.jpg)] bg-cover rounded-3xl  bg-center opacity-50 z-0" >
+          </div>
+          <div className="absolute inset-0 bg-black bg-opacity-50 mix-blend-multiply  z-10" />
+
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col items-center justify-between text-white text-center  h-full">
+
+              {/*top content  */}
+            <div className="flex border flex-col">
+                  <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-0 ">
+                  <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
+                </div>
+
+
+                <div className="relative z-20 flex flex-col items-center justify-center">
+                  {/* Title */}
+                  <div className="inline-block font-lucky font-bold text-yellow-300 text-3xl -tracking-wide -mt-9 
+                    text-stroke-red-950 text-stroke-1 rounded-xl py-2 px-2 
+                    bg-red-700 border-yellow-500 border-4 shadow-lg mb-9">
+                    Congratulations!
+                  </div>
+
+                </div>
+
+                {/* Message */}
+                  <div className=" mt-20">
+                    <p className="uppercase font-outfit mt-5 drop-shadow-lg text-sky-100 font-bold ">Challenge Completed</p>
+                    <div className="flex flex-col items-center justify-center">
+                      <p className="text-3xl py-3 font-mike text-orange-300  drop-shadow-md">+100 <span className='text-white -ml-2 text-xl'>Points</span></p>
+                      <p className='px-3 font-outfit text-sky-200'>You've earned points by completing the Challenge</p>
+                      
+                      
+                    </div>
+                  </div>
+
+            </div>
+
+            {/* bottom content */}
+            <div className="flex flex-col mt-5 justify-center items-center border h-full w-full">
+
+              <h2>Click here to reveal the badge</h2>
+
+              <div className="">give box </div>
+
+            </div>
+
+            {/* Button */}
+            {/* <button
+                onClick={() => {
+                  setShowCongrats(false);
+                  setShowQuizCard(false);
+                  badgeSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="mt-6 px-6 py-3 bg-black text-yellow-300 rounded-full 
+               hover:scale-105 active:scale-95 transition-all 
+               border-2 border-yellow-300 font-bold shadow-xl "
+              >
+                Collect Badge
+              </button> */}
+
+
+
+          </div>
+        </div>
+
+      </section>
+      {/* )} */}
+
+
 
 
 
@@ -499,17 +589,23 @@ function QuizPage() {
 
 
 
-          <QuizCard
+          {/* <QuizCard
             questionData={questionData}
             selectedAnswer={selectedAnswer}
             setSelectedAnswer={setSelectedAnswer}
             feedback={feedback}
             handleSubmit={handleSubmit}
             posterId={posterId}
-          />
+          /> */}
 
-          <Badge deviceId={deviceId} />
-          <LeaderBoard />
+          <div ref={badgeSectionRef}>
+            <Badge deviceId={deviceId} />
+          </div>
+
+          <div ref={LeaderBoardSecRef}>
+            <LeaderBoard />
+          </div>
+
 
 
         </div>
@@ -518,11 +614,11 @@ function QuizPage() {
       </div>
 
       <section className='bg-black'>
-        <h2 className='text-white text-xl font-Durango'>SCANS- 600</h2>
+        <h2 className='text-white text-xl font-Durango'>SCANS- 600 durango</h2>
         <h2 className='text-white text-xl font-gyoza'>Jade Eventual Quail</h2>
         <h2 className='text-yellow-500 text-4xl font-kerod '>Jade Eventual Quail</h2>
-        <h2 className='text-white text-4xl font-midorima'>Scans 600</h2>
-        <h2 className='text-white text-4xl font-mike'>600</h2>
+        <h2 className='text-white text-4xl font-midorima'>Scans miorima</h2>
+        <h2 className='text-white text-4xl font-mike'>600 mike</h2>
         <h2 className='text-white text-4xl font-noctaOutline'>Jade Eventual Quail</h2>
         <h2 className='text-white text-4xl font-noctaSolid'>Jade Eventual Quail</h2>
         <h2 className='text-white text-4xl font-pcme'>Jade</h2>
