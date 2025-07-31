@@ -13,6 +13,8 @@ import MainPage from './MainPage.jsx';
 import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc';
 import Lottie from 'lottie-react';
 import welcome from '../assets/Welcome.json'
+import coin_collection from '../assets/coin_collection.json'
+import gift_box from '../assets/gift_box.json'
 import { uniqueDevice } from '../hooks/uniqueDevice.js';
 import { TypewriterEffectSmootha } from './other_components/HeroText.jsx';
 import CircularGallery from './other_components/CircularGallery.jsx'
@@ -23,6 +25,7 @@ import trophy from '../../public/assets/img/trophy.png';
 import { Counter } from "./other_components/Counter.jsx";
 import AnimatedCounter from './other_components/AnimatedCounter.jsx';
 import { AnimatePresence, motion } from "motion/react"
+import { ClickToPlayLottie, ClicktoOpenGift, CoinAnimation } from './animations/Animation.jsx';
 
 
 
@@ -492,56 +495,76 @@ function QuizPage() {
       {/* {showCongrats && ( */}
       <section className=" fixed inset-0 z-[999] flex  justify-center items-center bg-black/70 backdrop-blur-lg ">
 
-        <div className="relative flex flex-col h-[90%] w-[90%] mx-3 py-2 px-2  rounded-3xl shadow-2xl drop-shadow-lg border 
-           ">
-          {/* bg-gradient-to-br from-yellow-300 to-orange-500 border-[0.5px] border-yellow-500 */}
+        <div className="relative flex flex-col  h-[60%] w-[90%] mx-3 py-2 px-2  rounded-3xl shadow-2xl drop-shadow-lg border-4 border-red-100/20">
+
 
           {/* Background Image + Overlay */}
-          <div className="absolute inset-0 bg-[url(/assets/img/gm-bg-2.jpg)] bg-cover rounded-3xl  bg-center opacity-50 z-0" >
+          <div className="absolute inset-0 bg-[url(/assets/img/gm-bg-2.jpg)] bg-cover rounded-3xl  bg-center opacity-50 z-0 " >
           </div>
-          <div className="absolute inset-0 bg-black bg-opacity-50 mix-blend-multiply  z-10" />
+          <div className="absolute inset-0 bg-black bg-opacity-50 mix-blend-multiply rounded-3xl  z-10" />
 
 
           {/* Content */}
           <div className="relative z-10 flex flex-col items-center justify-between text-white text-center  h-full">
 
-              {/*top content  */}
-            <div className="flex border flex-col">
-                  <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-0 ">
-                  <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
+            {/*top content  */}
+            <div className="flex  flex-col">
+              <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-1 ">
+                <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
+              </div>
+              <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-16 ">
+                <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
+              </div>
+
+
+              <div className="relative z-20 flex flex-col items-center justify-center">
+
+                <div className="relative  w-full h-[200px] ">
+                  <img
+                    src="/assets/img/you_gift.png"
+                    alt="You_win"
+                    className="absolute  w-[250%] h-[350px] object-contain -top-40"
+                  />
                 </div>
+              </div>
 
 
-                <div className="relative z-20 flex flex-col items-center justify-center">
-                  {/* Title */}
-                  <div className="inline-block font-lucky font-bold text-yellow-300 text-3xl -tracking-wide -mt-9 
-                    text-stroke-red-950 text-stroke-1 rounded-xl py-2 px-2 
-                    bg-red-700 border-yellow-500 border-4 shadow-lg mb-9">
-                    Congratulations!
+              {/* Message */}
+              <div className=" -mt-20">
+                <p className="uppercase font-outfit mt-5 drop-shadow-lg text-sky-100 font-bold ">Challenge Completed</p>
+                
+                {/* Coin */}
+                <div className="relative flex flex-col items-center justify-center ">
+                  
+                  <div className="flex items-center justify-center z-0 my-3">
+                   
+
+                    <img src="/assets/img/button-coin.png" alt="coin-background" className='absolute z-1 h-12 ' />
+                    <div className="flex flex-row justify-center items-center z-10">
+                       <div className="absolute z-0 inset-0 pointer-events-none h-[300px] w-[300px]">
+                    <Lottie animationData={coin_collection} loop={false} />
                   </div>
-
-                </div>
-
-                {/* Message */}
-                  <div className=" mt-20">
-                    <p className="uppercase font-outfit mt-5 drop-shadow-lg text-sky-100 font-bold ">Challenge Completed</p>
-                    <div className="flex flex-col items-center justify-center">
-                      <p className="text-3xl py-3 font-mike text-orange-300  drop-shadow-md">+100 <span className='text-white -ml-2 text-xl'>Points</span></p>
-                      <p className='px-3 font-outfit text-sky-200'>You've earned points by completing the Challenge</p>
-                      
-                      
+                      <img src="/assets/img/coin.png" alt="coins" className='h-10' />
+                      <p className="text-xl py-3 font-mike text-white drop-shadow-md">+100
+                        
+                        {/* <span className='text-white -ml-2 text-xl'>Points</span> */}
+                      </p>
                     </div>
                   </div>
+                   <p className='px-3 mt- font-outfit text-sky-200'>You've earned points by completing the Challenge</p>
+                </div>
+              </div>
+
 
             </div>
 
             {/* bottom content */}
-            <div className="flex flex-col mt-5 justify-center items-center border h-full w-full">
+            <div className="flex flex-col mt-0 justify-center items-center  h-full w-full">
+              <p className='pt-18 -mt-10 font-lucky text-white '>Click and Collect your badge</p>
 
-              <h2>Click here to reveal the badge</h2>
-
-              <div className="">give box </div>
-
+              <div className=" -mt-50 md:-mt-44 items-center justify-center ml-6 shadow-2xl ">
+                <ClicktoOpenGift className="shadow-xl"/>
+              </div>
             </div>
 
             {/* Button */}
@@ -566,6 +589,13 @@ function QuizPage() {
       </section>
       {/* )} */}
 
+
+      {/* <section className='min-h-screen'>
+
+        <Lottie animationData={coin_collection} />
+
+
+      </section> */}
 
 
 
