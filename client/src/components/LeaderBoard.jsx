@@ -23,7 +23,7 @@ export default function LeaderBoard() {
 
         const data = await getLeaderboard();
         setLeader(data || []);
-        console.log("Leaderboard data fetched:", data);
+        console.log("Leaderboard", data)
 
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
@@ -38,8 +38,9 @@ export default function LeaderBoard() {
   if (loading) return <div className="text-sm text-gray-300">Loading leaderboard...</div>;
 
   const getRankNumber = (index, isCurrentUser) => {
-    console.log("Current user :", currentDeviceId, "Nickename", currentNickName)
+
     const baseStyle = 'flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm'
+
     const style = rankStyles[index] || (
       isCurrentUser
         ? { bg: 'bg-cyan-400', text: 'text-gray-900' }
@@ -54,34 +55,118 @@ export default function LeaderBoard() {
 
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-cyan-500/20 max-w-2xl mx-auto">
+    <div className="bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-cyan-500/20 max-w-2xl mx-auto">
       <h3 className="text-xl font-bold text-white mb-4 flex items-center">
         <svg className="w-6 h-6 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
-        Leaderboard 
+        Leaderboard
       </h3>
 
-      {leader.length === 0 ? (
+
+
+      {/* 1st- 3  */}
+      <div className="flex justify-center items-center w-full font-outfit mb-4 rounded-xl">
+        <div className="flex flex-row w-full">
+          {/* 2nd Place */}
+          <div className="flex flex-col justify-between items-center w-full">
+            <div className="flex flex-col items-center pt-10">
+              <div className="flex justify-start pb-3 font-brigada text-yellow-300 text-lg">
+                2 <span className="text-sm pl-1">nd</span>
+              </div>
+              <img
+                src="/assets/img/man.png"
+                alt="icon"
+                className={`h-24 ${leader[1]?.deviceId === currentDeviceId ? 'animate-[short-bounce_1s_infinite]' : ''}`}
+              />
+            </div>
+            <div className="pt-3 flex flex-col items-center font-bold text-yellow-200 text-center">
+              {leader[1]?.deviceId === currentDeviceId ? (
+                <span className="text-white bg-cyan-600 px-2 py-1 rounded-full text-xs">You</span>
+              ) : (
+                <span>
+                  {leader[1]?.nickName?.length > 10
+                    ? leader[1].nickName.slice(0, 10) + '...'
+                    : leader[1]?.nickName || '---'}
+                </span>
+              )}
+              <span className="text-white">{leader[1]?.scanCount || 0}</span>
+            </div>
+          </div>
+
+          {/* 1st Place */}
+          <div className="flex flex-col justify-between items-center w-full text-center">
+            <div>
+              <img
+                src="/assets/img/winner.png"
+                alt="icon"
+                className={`h-30 ${leader[0]?.deviceId === currentDeviceId ? 'animate-[short-bounce_1s_infinite]' : ''}`}
+              />
+            </div>
+            <div className="pt-3 flex flex-col items-center font-bold text-yellow-200">
+              {leader[0]?.deviceId === currentDeviceId ? (
+                <span className="text-white bg-cyan-600 px-2 py-1 rounded-full text-xs">You</span>
+              ) : (
+                <span>
+                  {leader[0]?.nickName?.length > 10
+                    ? leader[0].nickName.slice(0, 10) + '...'
+                    : leader[0]?.nickName || '---'}
+                </span>
+              )}
+              <span className="text-white">{leader[0]?.scanCount || 0}</span>
+            </div>
+          </div>
+
+          {/* 3rd Place */}
+          <div className="flex flex-col justify-between items-center w-full text-center">
+            <div className="flex flex-col items-center pt-10">
+              <div className="flex justify-start pb-3 font-brigada text-yellow-300 text-lg">
+                3 <span className="text-sm pl-1">rd</span>
+              </div>
+              <img
+                src="/assets/img/man.png"
+                alt="icon"
+                className={`h-24 ${leader[2]?.deviceId === currentDeviceId ? 'animate-[short-bounce_1s_infinite]' : ''}`}
+              />
+            </div>
+            <div className="pt-3 flex flex-col items-center font-bold text-yellow-200 text-center">
+              {leader[2]?.deviceId === currentDeviceId ? (
+                <span className="text-white bg-cyan-600 px-2 py-1 rounded-full text-xs">You</span>
+              ) : (
+                <span>
+                  {leader[2]?.nickName?.length > 10
+                    ? leader[2].nickName.slice(0, 10) + '...'
+                    : leader[2]?.nickName || '---'}
+                </span>
+              )}
+              <span className="text-white">{leader[2]?.scanCount || 0}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      {leader.length <= 3 ? (
         <p className="text-sm text-gray-300">No leaderboard data available.</p>
       ) : (
         <div className="space-y-3">
-          {leader.map((leader, index) => {
-            const isCurrentUser = leader.deviceId === currentDeviceId;
-            const nickName = isCurrentUser
-              ? currentNickName
-              : `${leader.nickName}`;
+          {leader.slice(3, 10).map((leaderItem, index) => {
+            const actualIndex = index + 3;
+            const isCurrentUser = leaderItem.deviceId === currentDeviceId;
+            const nickName = isCurrentUser ? currentNickName : leaderItem.nickName;
 
             return (
               <div
-                key={leader.deviceId}
-                className={`flex items-center space-x-3 p-3 rounded-xl transition-all duration-300 hover:scale-105 ${isCurrentUser ? 'ring-2 ring-cyan-400' : ''} ${getRankStyle(index, isCurrentUser)}`}
+                key={leaderItem.deviceId}
+                className={`flex items-center space-x-3 p-3 rounded-xl transition-all border border-sky-500/30 duration-300 hover:scale-105 hover:border-sky-500/80 ${isCurrentUser ? 'ring-2 ring-cyan-400' : ''
+                  } ${getRankStyle(actualIndex, isCurrentUser)}`}
               >
-                {getRankNumber(index, isCurrentUser)}
+                {getRankNumber(actualIndex, isCurrentUser)}
 
                 <div className="flex-1">
                   <p className="font-semibold text-white flex items-center">
-                    {nickName}
+                    {nickName?.length > 10 ? nickName.slice(0, 10) + '...' : nickName}
                     {isCurrentUser && (
                       <span className="ml-2 text-xs bg-cyan-400 text-gray-900 px-2 py-1 rounded-full">
                         You
@@ -91,8 +176,15 @@ export default function LeaderBoard() {
                 </div>
 
                 <div className="text-right">
-                  <p className={`font-bold ${index === 0 ? 'text-yellow-400' : isCurrentUser ? 'text-cyan-400' : 'text-gray-400'}`}>
-                    {leader.scanCount} scans
+                  <p
+                    className={`font-bold ${actualIndex === 0
+                      ? 'text-yellow-400'
+                      : isCurrentUser
+                        ? 'text-cyan-400'
+                        : 'text-gray-400'
+                      }`}
+                  >
+                    {leaderItem.scanCount} scans
                   </p>
                 </div>
               </div>
@@ -100,6 +192,7 @@ export default function LeaderBoard() {
           })}
         </div>
       )}
+
 
       <div className="mt-4 pt-4 border-t border-gray-700">
         <p className="text-center text-gray-400 text-sm">

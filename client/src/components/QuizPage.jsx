@@ -14,6 +14,8 @@ import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vs
 import Lottie from 'lottie-react';
 import welcome from '../assets/Welcome.json'
 import coin_collection from '../assets/coin_collection.json'
+import ray from '../assets/ray.json'
+import ray_yellow from '../assets/ray_yellow.json'
 import gift_box from '../assets/gift_box.json'
 import { uniqueDevice } from '../hooks/uniqueDevice.js';
 import { TypewriterEffectSmootha } from './other_components/HeroText.jsx';
@@ -26,6 +28,7 @@ import { Counter } from "./other_components/Counter.jsx";
 import AnimatedCounter from './other_components/AnimatedCounter.jsx';
 import { AnimatePresence, motion } from "motion/react"
 import { ClickToPlayLottie, ClicktoOpenGift, CoinAnimation } from './animations/Animation.jsx';
+import ScratchClueCard from './other_components/ScratchCard.jsx';
 
 
 
@@ -53,6 +56,8 @@ function QuizPage() {
   const [showQuizCard, setShowQuizCard] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
+  const [showClue, setShowClue] = useState(false);
+  const [ShowClueBox, setShowClueBox] = useState(false);
 
 
 
@@ -380,7 +385,7 @@ function QuizPage() {
 
               <div className="relative flex flex-row  items-center ">
 
-                <div class="absolute -left-2 z-10  loader border-r-2 rounded-full border-yellow-500 bg-yellow-300
+                <div className="absolute -left-2 z-10  loader border-r-2 rounded-full border-yellow-500 bg-yellow-300
                   aspect-square w-8 flex justify-center items-center text-yellow-700 right-3 " >⭐</div>
 
                 <div className="flex font-lucky bg-blue-950 border items-center justify-center  py-1 px-6 pl-7 border-blue-700 rounded-full shadow-xl z-0  ">
@@ -493,15 +498,15 @@ function QuizPage() {
 
       {/* Congratulation pop-up */}
       {/* {showCongrats && ( */}
-      <section className=" fixed inset-0 z-[999] flex  justify-center items-center bg-black/70 backdrop-blur-lg ">
+      <section className="hidden inset-0 z-[999] flex  justify-center items-center bg-black/70 backdrop-blur-lg ">
 
-        <div className="relative flex flex-col  h-[60%] w-[90%] mx-3 py-2 px-2  rounded-3xl shadow-2xl drop-shadow-lg border-4 border-red-100/20">
-
-
+        <div className="relative flex flex-col  h-[60%] w-[90%] mx-3 py-2 px-2 rounded-3xl shadow-2xl drop-shadow-lg border-4
+         border-red-100/20">
           {/* Background Image + Overlay */}
           <div className="absolute inset-0 bg-[url(/assets/img/gm-bg-2.jpg)] bg-cover rounded-3xl  bg-center opacity-50 z-0 " >
           </div>
           <div className="absolute inset-0 bg-black bg-opacity-50 mix-blend-multiply rounded-3xl  z-10" />
+          <div className=""><img src="/assets/img/badges/badge_1.png" alt="" /></div>
 
 
           {/* Content */}
@@ -532,40 +537,90 @@ function QuizPage() {
               {/* Message */}
               <div className=" -mt-20">
                 <p className="uppercase font-outfit mt-5 drop-shadow-lg text-sky-100 font-bold ">Challenge Completed</p>
-                
+
                 {/* Coin */}
                 <div className="relative flex flex-col items-center justify-center ">
-                  
+
                   <div className="flex items-center justify-center z-0 my-3">
-                   
+
 
                     <img src="/assets/img/button-coin.png" alt="coin-background" className='absolute z-1 h-12 ' />
                     <div className="flex flex-row justify-center items-center z-10">
-                       <div className="absolute z-0 inset-0 pointer-events-none h-[300px] w-[300px]">
-                    <Lottie animationData={coin_collection} loop={false} />
-                  </div>
+                      <div className="absolute z-0 inset-0 pointer-events-none h-[300px] w-[300px]">
+                        <Lottie animationData={coin_collection} loop={false} />
+                      </div>
                       <img src="/assets/img/coin.png" alt="coins" className='h-10' />
                       <p className="text-xl py-3 font-mike text-white drop-shadow-md">+100
-                        
+
                         {/* <span className='text-white -ml-2 text-xl'>Points</span> */}
                       </p>
                     </div>
                   </div>
-                   <p className='px-3 mt- font-outfit text-sky-200'>You've earned points by completing the Challenge</p>
+                  <p className='px-3 mt- font-outfit text-sky-200'>You've earned points by completing the Challenge</p>
                 </div>
               </div>
-
-
             </div>
 
             {/* bottom content */}
             <div className="flex flex-col mt-0 justify-center items-center  h-full w-full">
               <p className='pt-18 -mt-10 font-lucky text-white '>Click and Collect your badge</p>
 
+
+
               <div className=" -mt-50 md:-mt-44 items-center justify-center ml-6 shadow-2xl ">
-                <ClicktoOpenGift className="shadow-xl"/>
+                <ClicktoOpenGift className="shadow-xl" onOpen={() => setShowBadge(true)} />
               </div>
             </div>
+
+            {/* Badge----------------------- */}
+            {showBadge && (
+              <motion.div
+                initial={{ y: 200, opacity: 0, scale: 0.5 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                transition={{ duration: 2, delay: 1, ease: "easeOut" }}
+
+                className="absolute top-9 z-150">
+                <div className="z-102"><img src="/assets/img/badges/Badge_1.png" alt="badge" className='h-80' /></div>
+              </motion.div>
+            )}
+
+            {/* Yellow ray */}
+            {showBadge && (
+              <motion.div
+                initial={{ y: 200, opacity: 0, scale: 0.5 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
+
+                className="absolute z-90 top-3 "><Lottie animationData={ray_yellow} className='h-96' />
+              </motion.div>
+            )}
+
+            {showBadge && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
+                className="absolute z-105 bottom-8 drop-shadow-2xl  "
+              >
+                <div className="relative flex flex-col gap-3 items-center justify-center mt-">
+
+                  <p className="absolute z-10 text-xl font-mike text-white drop-shadow-md">Collect</p>
+
+
+                  <img
+                    src="/assets/img/button-coin.png"
+                    alt="coin-background"
+                    className="relative z-0 h-12"
+                    onClick={() => setShowBadge(false)}
+                  />
+
+                </div>
+
+              </motion.div>
+
+            )
+
+            }
 
             {/* Button */}
             {/* <button
@@ -584,7 +639,18 @@ function QuizPage() {
 
 
           </div>
+          {/* {showClue && (
+            <ScratchClueCard  clueText="Look near the glowing lantern!"/>
+          )} */}
+
+          {/* <div className="absolute border flex w-full h-full items-center justify-center z-999 ">
+           <ScratchClueCard  clueText="Look near the glowing lantern!" className="drop-shadow-xl"/>
+         </div> */}
+
+
+
         </div>
+
 
       </section>
       {/* )} */}
@@ -596,6 +662,56 @@ function QuizPage() {
 
 
       </section> */}
+
+      {/* Clue popup ------------------------------------------- */}
+      <section className='hidden fixed inset-0 z-[999] h-screen w-screen flex justify-center items-center backdrop-blur-sm'>
+        <div className=" w-full">
+          {showClue && (
+          <motion.div
+            initial={{ y: 200, opacity: 0, scale: 0.5 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut"}}
+
+            className="text-white h-full flex flex-col justify-center items-center">
+            <ScratchClueCard 
+              clueText="Sabith the Boss" 
+              className="drop-shadow-xl "
+              onReval={()=> {
+                badgeSectionRef.current?.scrollIntoView({behavior: 'smooth'})
+              }} />
+          </motion.div>
+        )
+        }
+
+        <motion.div
+          initial={{ y: 180, opacity: 0, scale: 0.5 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="h-full items-center justify-center flex animate-[short-bounce_1s_infinite]">
+          <img src="/assets/img/clue.png" alt="clue-box" className='h-56 z-11 '
+            onClick={() => { setShowClue(true), setShowClueBox(false) }}
+          />
+           <Lottie animationData={ray_yellow} className='absolute z-10 h-96' />
+        </motion.div>
+
+        
+        <motion.div
+                initial={{ y: 200, opacity: 0, scale: 0.5 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
+
+                className="absolute z-90 top-0 ">
+                  
+                 
+        </motion.div>
+        </div>
+          
+
+
+
+
+      </section>
+
 
 
 
@@ -629,13 +745,15 @@ function QuizPage() {
           /> */}
 
           <div ref={badgeSectionRef}>
-            <Badge deviceId={deviceId} />
+            <Badge deviceId={deviceId}  leaderboardRef={LeaderBoardSecRef}/>
           </div>
 
-          <div ref={LeaderBoardSecRef}>
+          <section className='min-h-screen'>
+            <div ref={LeaderBoardSecRef}>
             <LeaderBoard />
           </div>
 
+          </section>
 
 
         </div>

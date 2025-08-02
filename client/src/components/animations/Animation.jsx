@@ -29,13 +29,14 @@ export  function ClickToPlayLottie() {
 }
 
 
-export  function ClicktoOpenGift() {
+export  function ClicktoOpenGift({onOpen}) {
     const giftRef = useRef();
     const [isBouncing, setIsBouncing] = useState(true);
 
     const handleClick = () => {
     setIsBouncing(false); 
     giftRef.current?.play(); 
+    onOpen()
   };
 
     return(

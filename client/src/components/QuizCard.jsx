@@ -4,11 +4,9 @@ export function QuizCard({ questionData, selectedAnswer, setSelectedAnswer, feed
   return (
     <div className="relative bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white p-6 rounded-2xl shadow-2xl border border-cyan-400/30 overflow-hidden">
 
-      {/* Glowing background visual */}
       <div className="absolute -inset-1 bg-cyan-400 opacity-10 blur-2xl rounded-2xl z-0 pointer-events-none"></div>
 
       <div className="relative z-10 space-y-6">
-        {/* Poster ID Badge */}
         <div className="flex items-center justify-between">
           <div className="text-cyan-300 font-bold font-lucky text-sm px-4 py-2 border border-cyan-500 rounded-full bg-cyan-800/30 shadow-md uppercase">
             {posterId}

@@ -9,6 +9,7 @@ export function AnimatedProgressBar({
   height = 20,
   color = "#10B981",
   bgColor = "#1F2937",
+  showMessage = true,
 }) {
   const progress = Math.min(value, max);
   const percentage = (progress / max) * 100;
@@ -39,10 +40,9 @@ export function AnimatedProgressBar({
 
     
     <div className="w-full relative flex flex-col">
-      {label && (
-        <div className="mb-1 text-[10px] text-white  font-medium ">
+      {label && showMessage && ( 
+        <div className="mb-1 text-[10px] text-white font-medium">
           {progressMessage}
-          
         </div>
       )}
     
