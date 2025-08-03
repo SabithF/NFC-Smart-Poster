@@ -21,6 +21,7 @@ export const scanPoster = async (deviceId, posterId) => {
             body: JSON.stringify({ deviceId, posterId }),
         });
         return await res.json();
+        
     } catch (error) {
         console.error('Error fetching posters:', error);
     }

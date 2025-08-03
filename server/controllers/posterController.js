@@ -75,6 +75,7 @@ export const scanPoster = async (req, res) => {
     res.json({
       question: poster.question,
       options: poster.options,
+      clue: poster.nextClue
     });
 
   } catch (err) {
@@ -110,7 +111,7 @@ export const submitQuiz = async (req, res) => {
       user.badges.push(posterId);
 
       // Voucher logic: unlock if 5 badges collected
-      const voucherScanCount = 3;
+      const voucherScanCount = 5;
       if (user.badges.length >= voucherScanCount) user.voucherUnlocked = true;
       await user.save();
     }
