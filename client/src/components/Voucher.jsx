@@ -1,10 +1,23 @@
 import React from 'react';
 import QRCode from 'react-qr-code';
 
-export default function Voucher({ value, voucherUnlocked }) {
+export default function Voucher({ value, voucherUnlocked, setActivePopup }) {
     return (
+
+        <>
+        <div className="absolute z-10 md:relative md:bottom-0 md:right-0 bottom-70 right-48 flex items-center justify-center text-white   h-16 w-16" 
+        onClick={()=> setActivePopup(null)}>
+                <img src="/assets/img/btn/ok.png" alt="close btn"  />
+            </div>
+
+
         <div className="relative -mt-44 flex justify-center items-center w-full h-full max-w-3xl mx-auto">
+
+           
+
             <div className="group relative w-full h-full[perspective:1000px]">
+
+
                 <div className="transition-transform duration-1000 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] relative w-full h-full">
 
 
@@ -90,8 +103,13 @@ export default function Voucher({ value, voucherUnlocked }) {
                             </div>
                         </div>
                     </div>
+                    
                 </div>
+                
             </div>
         </div>
+        </>
+        
+        
     );
 }

@@ -12,7 +12,7 @@ const allBadges = [
     { id: 'p5', name: 'Rhythm Rider', image: 'Badge_5' },
 ];
 
-export default function Badge({ deviceId, leaderboardRef  }) {
+export default function Badge({ deviceId , setActivePopup }) {
     const [unlockedBadges, setUnlockedBadges] = useState([]);
     const [loading, setLoading] = useState(true);
     const allUnlocked = unlockedBadges.length === allBadges.length;
@@ -41,8 +41,15 @@ export default function Badge({ deviceId, leaderboardRef  }) {
     if (loading) return <div className="text-sm text-gray-300">Loading badge progress...</div>;
 
     return (
-        <div className="relative bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] mb-8 backdrop-blur-lg rounded-xl 
-        p-6 shadow-2xl border border-cyan-500/20 hover:shadow-cyan-500/50 transition-shadow duration-300 font-outfit">
+        <>
+        <div className="flex flex-col mx-3">
+            
+            <div className="bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-cyan-500/20 max-w-2xl">
+            
+            <div className="absolute text-white -top-3 -right-2 h-10 w-10">
+                <img src="/assets/img/btn/close.png" alt="close btn" onClick={()=> setActivePopup(null)} />
+            </div>
+
             {allUnlocked && (
                 <div className="absolute inset-0 pointer-events-none z-10">
                     {/* <Lottie animationData={confettiAnimation} loop={false} /> */}
@@ -92,8 +99,8 @@ export default function Badge({ deviceId, leaderboardRef  }) {
                     />
                 </div>
             </div>
-
-            <div className="flex items-center justify-center">
+            {/* Leaderboard */}
+            {/* <div className="flex items-center justify-center">
                 <div
                                 initial={{ opacity: 0, scale: 0.5 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -122,8 +129,33 @@ export default function Badge({ deviceId, leaderboardRef  }) {
 
                 
                 
+            </div> */}
+        
+            
             </div>
-
+            
+            {/* Navigation button */}
+            <div className="flex items-end justify-center -mt-7">
+                <div className="flex flex-row gap-3">
+                     {/* <img src='/assets/img/btn/close.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" />
+                     <img src='/assets/img/btn/home.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" />
+                     */}
+                     {/* <img src='/assets/img/btn/ok.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" /> */}
+                    
+                    <div className="  flex flex-col justify-center items-center" 
+                           onClick={()=> setActivePopup('leaderboard')}>
+                        <img src='/assets/img/btn/next.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" /> 
+                        <span className='text-sky-200/90 font-semibold font-outfit  bg-white/4  px-2 py-1 rounded-md text-sm shadow-xl'>Leaderboard</span>
+                    </div>
+                    <div className=" hidden flex-col justify-center items-center">
+                        <img src='/assets/img/btn/b_trophy.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" /> 
+                        <span className='text-sky-200/90 font-semibold font-outfit  bg-white/4  px-2 py-1 rounded-md text-sm shadow-xl'>Leaderboard</span>
+                    </div>
+                    
+                </div>
+            </div>
         </div>
+        
+        </>
     );
 }

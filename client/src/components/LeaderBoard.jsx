@@ -11,7 +11,7 @@ const rankStyles = {
 }
 
 
-export default function LeaderBoard() {
+export default function LeaderBoard({setActivePopup}) {
   const { deviceId: currentDeviceId, nickName: currentNickName } = uniqueDevice();
   const [leader, setLeader] = useState([]);
   const [loading, setLoading] = useState(true)
@@ -55,7 +55,11 @@ export default function LeaderBoard() {
 
 
   return (
-    <div className=" bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-cyan-500/20 max-w-2xl mx-auto">
+    <div className="flex flex-col ">
+      <div className=" bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-cyan-500/20 max-w-2xl flex flex-col  justify-center mx-3">
+      <div className="absolute text-white -top-3 -right-2 h-10 w-10">
+                <img src="/assets/img/btn/close.png" alt="close btn" onClick={()=> setActivePopup(null)} />
+            </div>
       <h3 className="text-xl font-bold text-white mb-4 flex items-center   font-outfit">
         <svg className="w-6 h-6 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -200,6 +204,22 @@ export default function LeaderBoard() {
         </p>
       </div>
     </div>
+    <div className="flex items-end justify-center mt-3">
+                <div className="flex flex-row gap-3">
+                    
+                    
+                    <div className="  flex flex-col justify-center items-center" 
+                           onClick={()=> setActivePopup('voucher')}>
+                        <img src='/assets/img/btn/voucher_btn.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" /> 
+                        <span className='text-sky-200/90 font-semibold font-outfit  bg-white/4  px-2 py-1 rounded-md text-sm shadow-xl'>My Voucher</span>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+    </div>
+    
+    
   );
 }
 

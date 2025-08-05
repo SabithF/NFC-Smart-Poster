@@ -39,7 +39,7 @@ import FloatingFab from './other_components/FAB.jsx';
 function QuizPage() {
   const { nickName, deviceId } = uniqueDevice();
   const { posterId } = useParams();
-  const navigate = useNavigate();
+
   const bannerSectionRef = useRef(null);
   const heroSectionRef = useRef(null);
   const gameSectionRef = useRef(null);
@@ -57,15 +57,21 @@ function QuizPage() {
   const [scanCount, setScanCount] = useState(0);
   const [badgeCount, setBadgeCount] = useState(0);
   const [userPoints, setUserPointes] = useState(0);
-  const [showQuizCard, setShowQuizCard] = useState(false);
-  const [showCongrats, setShowCongrats] = useState(false);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
-  const [showClue, setShowClue] = useState(false);
-  const [ShowClueBox, setShowClueBox] = useState(false);
-  const [isPlayGround, setIsPlayGround] = useState(false);
   const [play, setPlay] = useState(false);
   const [isVoucherCode, setVoucherCode] = useState("Complete your badge hunt...");
   const [voucherUnlocked, setVoucherUnlocked] = useState(false);
+  const [showVoucher, setShowVoucher] = useState(true);
+
+  const [activePopup, setActivePopup] = useState(null);
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [showClue, setShowClue] = useState(false);
+  const [ShowClueBox, setShowClueBox] = useState(false);
+  const [showQuizCard, setShowQuizCard] = useState(false);
+
+  // const [isPlayGround, setIsPlayGround] = useState(false);
+  // const [showBadgeSection, setShowBadgeSection] = useState(false);
+  // const [showLeaderboard, setShowLeaderboard] = useState(false);
 
 
 
@@ -94,7 +100,6 @@ function QuizPage() {
 
         if (qData.question) {
           setQuestionData(qData);
-          console.log("Q data", qData)
 
         } else if (qData.message) {
           setError(qData.message);
@@ -149,16 +154,17 @@ function QuizPage() {
 
   //  Controlling the background scroll
   useEffect(() => {
-    if (showQuizCard || showCongrats || isPlayGround) {
+    if (activePopup !== null) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
 
     return () => {
-      document.body.style.overflow = 'auto'
-    }
-  }, [showQuizCard, showCongrats, isPlayGround])
+      document.body.style.overflow = 'auto';
+    };
+  }, [activePopup]);
+
 
 
   useEffect(() => {
@@ -211,7 +217,7 @@ function QuizPage() {
     <>
 
 
-      {/* Hero Section */}
+      {/* Hero Section -----------------------------------------*/}
       <section
         ref={heroSectionRef}
         className='h-screen w-screen    bg-[#040414] overflow-hidden'>
@@ -274,7 +280,7 @@ function QuizPage() {
                 setIsLoadingGame(true);
                 setTimeout(() => {
                   setIsLoadingGame(false);
-                  setIsPlayGround(true); // Show playground
+                  setActivePopup('playground')
                 }, 1800);
               }}
             />
@@ -288,10 +294,9 @@ function QuizPage() {
           </div>
 
           <button
-            className="text-white w-full z-21 text-center py-3 font-outfit underline"
+            className="text-white w-full z-9 text-center py-3 font-outfit underline"
             onClick={() => {
               bannerSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-              console.log(bannerSectionRef.current);
             }}
           >
             More info
@@ -404,7 +409,7 @@ function QuizPage() {
 
 
       {/* Game zone ---------------------------------------------------------------------------------------------------------------------------------------------*/}
-      {isPlayGround && (
+      {activePopup === 'playground' && (
         <motion.div
 
           initial={{ opacity: 0, scale: 0.8 }}
@@ -415,7 +420,7 @@ function QuizPage() {
           ref={gameSectionRef}
           className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-10 backdrop-blur-md"
         >
-          c
+
           <section
             ref={gameSectionRef}
             className="h-[95%] w-[95%] relative overflow-hidden rounded-xl shadow-xl bg-[url(/assets/img/gm-bg-2.jpg)] bg-cover bg-center bg-blend-multiply"
@@ -423,10 +428,10 @@ function QuizPage() {
 
 
             <button
-              onClick={() => setIsPlayGround(false)}
+              onClick={() => setActivePopup(null)}
               className="absolute top-4 right-4 z-50 text-red-400 font-black text-2xl "
             >
-              <img src="/assets/img/exit.png" alt="" className='h-10' />
+              <img src="/assets/img/exit.png" alt="close" className='h-10' />
             </button>
 
             <div className="absolute inset-0 bg-black/85 z-0" />
@@ -586,147 +591,159 @@ function QuizPage() {
 
 
       {/* Congratulation pop-up ---------------------------------*/}
-      {/* {showCongrats && ( */}
-      <section className="hidden fixed inset-0 z-[999] flex  justify-center items-center bg-black/70 backdrop-blur-lg ">
 
-        <div className="relative flex flex-col  h-[60%] w-[90%] mx-3 py-2 px-2 rounded-3xl shadow-2xl drop-shadow-lg border-4
+      {showCongrats && (
+        <section className="fixed  inset-0 z-[999] flex  justify-center items-center bg-black/70 backdrop-blur-lg ">
+
+          <div className="relative flex flex-col  h-[60%] w-[90%] mx-3 py-2 px-2 rounded-3xl shadow-2xl drop-shadow-lg border-4
          border-red-100/20">
-          {/* Background Image + Overlay */}
-          <div className="absolute inset-0 bg-[url(/assets/img/gm-bg-2.jpg)] bg-cover rounded-3xl  bg-center opacity-50 z-0 " >
-          </div>
-          <div className="absolute inset-0 bg-black bg-opacity-50 mix-blend-multiply rounded-3xl  z-10" />
+            {/* Background Image + Overlay */}
+            <div className="absolute inset-0 bg-[url(/assets/img/gm-bg-2.jpg)] bg-cover rounded-3xl  bg-center opacity-50 z-0 " >
+            </div>
+            <div className="absolute inset-0 bg-black bg-opacity-50 mix-blend-multiply rounded-3xl  z-10" />
 
-          <div className=""><img src="/assets/img/badges/badge_1.png" alt="badge" /></div>
-
-
-          {/* Content */}
-          <div className="relative z-10 flex flex-col items-center justify-between text-white text-center  h-full">
-
-            {/*top content  */}
-            <div className="flex  flex-col">
-              <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-1 ">
-                <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
-              </div>
-              <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-16 ">
-                <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
-              </div>
+            <div className=""><img src="/assets/img/badges/badge_1.png" alt="badge" /></div>
 
 
-              <div className="relative z-20 flex flex-col items-center justify-center">
+            {/* Content */}
+            <div className="relative z-10 flex flex-col items-center justify-between text-white text-center  h-full">
 
-                <div className="relative  w-full h-[200px] ">
-                  <img
-                    src="/assets/img/you_gift.png"
-                    alt="You_win"
-                    className="absolute  w-[250%] h-[350px] object-contain -top-40"
-                  />
+              {/*top content  */}
+              <div className="flex  flex-col">
+                <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-1 ">
+                  <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
                 </div>
-              </div>
+                <div className="absolute inset-0 pointer-events-none flex items-start justify-start z-10 top-16 ">
+                  <img src="/assets/img/confetti2.png" alt="confetti" className=' object-cover  ' />
+                </div>
 
 
-              {/* Message */}
-              <div className=" -mt-20">
-                <p className="uppercase font-outfit mt-5 drop-shadow-lg text-sky-100 font-bold ">Challenge Completed</p>
+                <div className="relative z-20 flex flex-col items-center justify-center">
 
-                {/* Coin */}
-                <div className="relative flex flex-col items-center justify-center ">
-
-                  <div className="flex items-center justify-center z-0 my-3">
-
-
-                    <img src="/assets/img/button-coin.png" alt="coin-background" className='absolute z-1 h-12 ' />
-                    <div className="flex flex-row justify-center items-center z-10">
-                      <div className="absolute z-0 inset-0 pointer-events-none h-[300px] w-[300px]">
-                        {play && (
-                          <Lottie
-                            animationData={coin_collection}
-                            loop={false}
-                            speed={0.5}
-                          />
-                        )}
-                      </div>
-                      <img src="/assets/img/coin.png" alt="coins" className='h-10' />
-                      <p className="text-xl py-3 font-mike text-white drop-shadow-md">
-                        +1000
-
-                        {/* <span className='text-white -ml-2 text-xl'>Points</span> */}
-                      </p>
-                    </div>
+                  <div className="relative  w-full h-[200px] ">
+                    <img
+                      src="/assets/img/you_gift.png"
+                      alt="You_win"
+                      className="absolute  w-[250%] h-[350px] object-contain -top-40"
+                    />
                   </div>
-                  <p className='px-3 mt- font-outfit text-sky-200'>You've earned points by completing the Challenge</p>
-                </div>
-              </div>
-            </div>
-
-            {/* bottom content */}
-            <div className="flex flex-col mt-0 justify-center items-center  h-full w-full">
-              <p className='pt-18 -mt-10 font-lucky text-white '>Click and Collect your badge</p>
-
-
-
-              <div className=" -mt-50 md:-mt-44 items-center justify-center ml-6 shadow-2xl ">
-                <ClicktoOpenGift className="shadow-xl" onOpen={() => setShowBadge(true)} />
-              </div>
-            </div>
-
-
-            {/* Badge----------------------- */}
-            {showBadge && (
-              <motion.div
-                initial={{ y: 200, opacity: 0, scale: 0.5 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                transition={{ duration: 2, delay: 1, ease: "easeOut" }}
-
-                className="absolute top-9 z-150">
-
-                <div className="z-102"><img
-                  src={`/assets/img/badges/Badge_${posterId?.replace(/[^\d]/g, '') || 1}.png`}
-                  alt="badge"
-                  className='h-80'
-                  onClick={() => { setShowClueBox(true) }} /></div>
-              </motion.div>
-            )}
-
-            {/* Yellow ray */}
-            {showBadge && (
-              <motion.div
-                initial={{ y: 200, opacity: 0, scale: 0.5 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
-
-                className="absolute z-90 top-3 "><Lottie animationData={ray_yellow} className='h-96' />
-              </motion.div>
-            )}
-
-            {showBadge && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
-                className="absolute z-105 bottom-8 drop-shadow-2xl  "
-              >
-                <div className="relative flex flex-col gap-3 items-center justify-center mt-">
-
-                  <p className="absolute z-10 text-xl font-mike text-white drop-shadow-md">Collect</p>
-
-
-                  <img
-                    src="/assets/img/button-coin.png"
-                    alt="coin-background"
-                    className="relative z-0 h-12"
-                    onClick={() => { setShowBadge(false), showClue(true) }}
-                  />
-
                 </div>
 
-              </motion.div>
 
-            )
+                {/* Message */}
+                <div className=" -mt-20">
+                  <p className="uppercase font-outfit mt-5 drop-shadow-lg text-sky-100 font-bold ">Challenge Completed</p>
 
-            }
+                  {/* Coin */}
+                  <div className="relative flex flex-col items-center justify-center ">
 
-            {/* Button */}
-            {/* <button
+                    <div className="flex items-center justify-center z-0 my-3">
+
+
+                      <img src="/assets/img/button-coin.png" alt="coin-background" className='absolute z-1 h-12 ' />
+                      <div className="flex flex-row justify-center items-center z-10">
+                        <div className="absolute z-0 inset-0 pointer-events-none h-[300px] w-[300px]">
+                          {play && (
+                            <Lottie
+                              animationData={coin_collection}
+                              loop={false}
+                              speed={0.5}
+                            />
+                          )}
+                        </div>
+                        <img src="/assets/img/coin.png" alt="coins" className='h-10' />
+                        <p className="text-xl py-3 font-mike text-white drop-shadow-md">
+                          +1000
+                        </p>
+                      </div>
+                    </div>
+                    <p className='px-3 mt- font-outfit text-sky-200'>You've earned points by completing the Challenge</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* bottom content */}
+              <div className="flex flex-col mt-0 justify-center items-center  h-full w-full">
+                <p className='pt-18 -mt-10 font-lucky text-white '>Click and Collect your badge</p>
+
+
+
+                <div className=" -mt-50 md:-mt-44 items-center justify-center ml-6 shadow-2xl ">
+                  <ClicktoOpenGift className="shadow-xl" onOpen={() => setShowBadge(true)} />
+                </div>
+              </div>
+
+
+              {/* Badge----------------------- */}
+              {showBadge && (
+                <motion.div
+                  initial={{ y: 200, opacity: 0, scale: 0.5 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  transition={{ duration: 2, delay: 1, ease: "easeOut" }}
+
+                  className="absolute top-9 z-150">
+
+                  <div className="z-102"><img
+                    src={`/assets/img/badges/Badge_${posterId?.replace(/[^\d]/g, '') || 1}.png`}
+                    alt="badge"
+                    className='h-80'
+                    onClick={() => { setShowClueBox(true) }} /></div>
+                </motion.div>
+              )}
+
+              {/* Yellow ray */}
+              {showBadge && (
+                <motion.div
+                  initial={{ y: 200, opacity: 0, scale: 0.5 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
+
+                  className="absolute z-90 top-3 "><Lottie animationData={ray_yellow} className='h-96' />
+                </motion.div>
+              )}
+
+              {showBadge && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
+                  className="absolute z-105 bottom-8 drop-shadow-2xl  "
+                >
+                  <div className="relative flex flex-col gap-3 items-center justify-center mt-"
+                    onClick={() => {
+                      setShowBadge(false),
+                        setShowCongrats(false),
+                        setShowQuizCard(false),
+
+                        setTimeout(() => {
+                          setIsLoadingGame(false);
+                          setActivePopup('playground')
+                        }, 1800);
+                        setTimeout(()=> {setShowClueBox(true)}, 500)
+                      
+                    }}>
+
+
+                    <p className="absolute z-10 text-xl font-mike text-white drop-shadow-md">Collect</p>
+
+
+                    <img
+                      src="/assets/img/button-coin.png"
+                      alt="coin-background"
+                      className="relative z-0 h-12"
+
+                    />
+
+                  </div>
+
+                </motion.div>
+
+              )
+
+              }
+
+              {/* Button */}
+              {/* <button
                 onClick={() => {
                   setShowCongrats(false);
                   setShowQuizCard(false);
@@ -741,30 +758,18 @@ function QuizPage() {
 
 
 
+            </div>
+
           </div>
-          {/* {showClue && (
-            <ScratchClueCard  clueText="Look near the glowing lantern!"/>
-          )} */}
 
-          {/* <div className="absolute border flex w-full h-full items-center justify-center z-999 ">
-           <ScratchClueCard  clueText="Look near the glowing lantern!" className="drop-shadow-xl"/>
-         </div> */}
+
+        </section>
+      )}
 
 
 
-        </div>
 
 
-      </section>
-      {/* )} */}
-
-
-      {/* <section className='min-h-screen'>
-
-        <Lottie animationData={coin_collection} />
-
-
-      </section> */}
 
       {/* Clue popup ------------------------------------------- */}
       {ShowClueBox && (
@@ -780,9 +785,10 @@ function QuizPage() {
                 <ScratchClueCard
                   clueText={questionData.clue}
                   className="drop-shadow-xl "
-                  onReval={() => {
-                    badgeSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
-                  }} />
+                  setActivePopup={setActivePopup}
+                  closeClueBox={setShowClueBox}
+                  closeClueCard={setShowClue}
+                   />
               </motion.div>
             )
             }
@@ -793,7 +799,7 @@ function QuizPage() {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="h-full items-center justify-center flex animate-[short-bounce_1s_infinite]">
               <img src="/assets/img/clue.png" alt="clue-box" className='h-56 z-11 '
-                onClick={() => { setShowClue(true), setShowClueBox(false) }}
+                onClick={() => { setShowClue(true) }}
               />
               <Lottie animationData={ray_yellow} className='absolute z-10 h-96' />
             </motion.div>
@@ -810,50 +816,84 @@ function QuizPage() {
         </section>
       )}
 
+      {/* ENd of Playground------------------------------------------------------------------------------------------------------------------ */}
 
 
 
 
 
-      {/* <div className="min-h-screen bg-gradient-to-r from-gray-900 to-gray-900 text-white"> */}
-      <div className="min-h-screen bg-black text-white">
-        {/* bg pattern */}
-
-        <div className="fixed inset-0 opacity-10 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-pink-500/20" />
-        </div>
-
-        <div className="relative z-10 container mx-auto px-4 py-10 max-w-6xl">
-
-          <div ref={badgeSectionRef}>
-            <Badge deviceId={deviceId} leaderboardRef={LeaderBoardSecRef} />
-          </div>
-
-          <section className='min-h-screen '>
-            <div ref={LeaderBoardSecRef}>
-              <LeaderBoard />
-            </div>
-          </section>
-
-          {voucherUnlocked && (
-            <section className="fixed inset-0 z-[999] h-screen w-screen flex justify-center items-center backdrop-blur-sm">
-              <div ref={voucherRef} className="w-full h-full flex justify-center items-center  px-4">
-                <Voucher value={isVoucherCode} voucherUnlocked={voucherUnlocked} />
-              </div>
-            </section>
-          )}
+      {/* Other section -------------------------------------------------------  */}
 
 
 
-        </div>
-
-
+      {/* Bg pattern */}
+      <div className="fixed inset-0 opacity-10 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-pink-500/20" />
       </div>
 
 
 
+      {/* Badge section------------- */}
+      <AnimatePresence>
+        {activePopup === 'badges' && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+
+            className='fixed inset-0  h-screen w-screen  z-20 flex justify-center items-center backdrop-blur-xl' >
+            <div ref={badgeSectionRef}>
+              <Badge deviceId={deviceId} leaderboardRef={LeaderBoardSecRef} setActivePopup={setActivePopup} />
+            </div>
+          </motion.div>
+        )
+        }
+
+
+
+        {/* Leaderboard--------------- */}
+
+        {activePopup === 'leaderboard' && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className='fixed inset-0  h-screen w-screen  z-20 flex justify-center items-center backdrop-blur-xl '>
+            <div ref={LeaderBoardSecRef} >
+              <LeaderBoard setActivePopup={setActivePopup} />
+            </div>
+          </motion.div>
+        )}
+
+
+
+
+        {/* Voucher------------------ */}
+        {activePopup === 'voucher' && showVoucher && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="fixed inset-0  h-screen w-screen z-20 flex justify-center items-center backdrop-blur-xl">
+            <div ref={voucherRef} className="w-full h-full flex justify-center items-center  px-4">
+              <Voucher value={isVoucherCode} voucherUnlocked={voucherUnlocked} setActivePopup={setActivePopup} />
+            </div>
+          </motion.div>
+        )}
+
+      </AnimatePresence>
+
+
+
+
+
       <div className="fixed bottom-6 right-6 flex flex-col items-end space-y-2 z-[1000]">
-        <FloatingFab />
+        <FloatingFab
+          setActivePopup={setActivePopup}
+          scrollToHeroSection={scrollToHeroSection} />
       </div>
     </>
 

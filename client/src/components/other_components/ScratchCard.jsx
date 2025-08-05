@@ -1,13 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-export default function ScratchClueCard({ clueText, onReval }) {
+export default function ScratchClueCard({ clueText, setActivePopup, closeClueBox, closeClueCard }) {
     const canvasRef = useRef(null);
     const [scratched, setScratched] = useState(false);
 
 
     useEffect(() => {
         const canvas = canvasRef.current;
+        if(!canvas) return;
+
         const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
         const width = canvas.width;
         const height = canvas.height;
 
@@ -62,17 +66,22 @@ export default function ScratchClueCard({ clueText, onReval }) {
                 if (imageData.data[i + 3] < 128) scratchedPixels++;
             }
             const scratchedPercent = scratchedPixels / (width * height) * 100;
-            if (scratchedPercent > 50) 
+            if (scratchedPercent > 30)
                 setScratched(true);
+                setActivePopup('badges');
+                closeClueBox(false);
+                closeClueCard(false);
+            
 
-            if(onReval) {
-                setTimeout(() => onReval(), 500)
+            if (scratched) {
+
+
             }
         };
 
         if (!scratched) {
             const image = new Image();
-            image.src = '/assets/img/gift_cover.jpg'; 
+            image.src = '/assets/img/gift_cover.jpg';
             image.onload = () => {
                 ctx.drawImage(image, 0, 0, width, height);
             };
