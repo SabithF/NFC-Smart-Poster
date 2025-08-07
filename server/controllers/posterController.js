@@ -40,7 +40,7 @@ export const scanPoster = async (req, res) => {
         userUniqueId,
         badges: [],
         scanCount: 0,
-        scannedPosters: [posterId] // ← ensure this exists in schema or set default
+        scannedPosters: [posterId] 
       });
 
       await user.save();
@@ -68,7 +68,7 @@ export const scanPoster = async (req, res) => {
       return res.status(404).json({ error: 'Poster not found' });
     }
 
-    user.scanCount = user.scannedPosters.length; // Update scanCount based on scannedPosters
+    user.scanCount = user.scannedPosters.length;
     user.lastScan = new Date();
     await user.save();
 
@@ -119,13 +119,13 @@ export const submitQuiz = async (req, res) => {
     // obtaining voucher code-------------------------
     let userVoucherCode = null;
 
-    const allVouchers = await Voucher.find()
+    const allVouchers = await Voucher.findOne()
     console.log("All vouchers", allVouchers)
 
     if (user.voucherUnlocked) {
       const voucher = await Voucher.findOne({
-        expiryDate: { $gt: new Date() },
-        redeemedUsers: { $ne: user._id }
+        // expiryDate: { gt: new Date() } $,
+        // redeemedUsers: { ne: user._id }
 
       });
 

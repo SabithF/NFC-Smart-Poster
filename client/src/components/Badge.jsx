@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getUserProgress } from '../api/posterApi';
 import Lottie from 'lottie-react';
 import { AnimatedProgressBar } from './other_components/ProgressBar.jsx'
-// import confettiAnimation from '../assets/animations/confetti.json'; // adjust path if needed
+
 
 const allBadges = [
     { id: 'p1', name: 'Mixtape Explorer', image: 'Badge_1' },
@@ -12,7 +12,7 @@ const allBadges = [
     { id: 'p5', name: 'Rhythm Rider', image: 'Badge_5' },
 ];
 
-export default function Badge({ deviceId , setActivePopup }) {
+export default function Badge({ deviceId , setActivePopup, onLoading }) {
     const [unlockedBadges, setUnlockedBadges] = useState([]);
     const [loading, setLoading] = useState(true);
     const allUnlocked = unlockedBadges.length === allBadges.length;
@@ -25,7 +25,7 @@ export default function Badge({ deviceId , setActivePopup }) {
             try {
                 const data = await getUserProgress(deviceId);
                 setUnlockedBadges(data.badges || []);
-                console.log("Unloked badges", data.badges)
+                // console.log("Unloked badges", data.badges)
             } catch (err) {
                 console.error('Error fetching badges:', err);
             } finally {
@@ -38,7 +38,7 @@ export default function Badge({ deviceId , setActivePopup }) {
 
     const progress = unlockedBadges.length / allBadges.length * 100;
 
-    if (loading) return <div className="text-sm text-gray-300">Loading badge progress...</div>;
+    if (loading) return onLoading || <div className="text-sm text-gray-300">Loading badge progress...</div>;
 
     return (
         <>
@@ -46,6 +46,7 @@ export default function Badge({ deviceId , setActivePopup }) {
             
             <div className="bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] backdrop-blur-lg rounded-3xl p-6 shadow-2xl border border-cyan-500/20 max-w-2xl">
             
+            {/* Close button */}
             <div className="absolute text-white -top-3 -right-2 h-10 w-10">
                 <img src="/assets/img/btn/close.png" alt="close btn" onClick={()=> setActivePopup(null)} />
             </div>

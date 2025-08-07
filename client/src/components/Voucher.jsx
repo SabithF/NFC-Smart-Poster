@@ -5,8 +5,9 @@ export default function Voucher({ value, voucherUnlocked, setActivePopup }) {
     return (
 
         <>
-        <div className="absolute z-10 md:relative md:bottom-0 md:right-0 bottom-70 right-48 flex items-center justify-center text-white   h-16 w-16" 
-        onClick={()=> setActivePopup(null)}>
+        <div className="absolute z-10 md:bottom-0 md:right-80 bottom-60 right-40 flex items-center 
+        justify-center text-white h-16 w-16" 
+        onClick={()=> setActivePopup('badges')}>
                 <img src="/assets/img/btn/ok.png" alt="close btn"  />
             </div>
 
@@ -90,9 +91,10 @@ export default function Voucher({ value, voucherUnlocked, setActivePopup }) {
                                         {value}
                                     </span>
                                 </p>
-                                {voucherUnlocked && (<div className="flex justify-center mt-1">
+                                {voucherUnlocked ? (<div className="flex justify-center mt-1">
                                     <QRCode value={value} size={50} />
-                                </div>)} <div className="text-center">to unclock the voucher Code</div>
+                                </div>) : (<div className="text-center">Collect all the badges to unlock the voucher </div>)}
+
                             </div>
 
                             <div className="w-[20%] text-center pt-5 rounded-lg h-fit p-2">

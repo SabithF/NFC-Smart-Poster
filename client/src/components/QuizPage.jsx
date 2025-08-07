@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getUserProgress, scanPoster, submitQuiz } from '../api/posterApi';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { getDeviceId } from '../utils/fingerprint.js';
 import { UserProfile } from './UserProfile.jsx';
 import { QuizCard } from './QuizCard.jsx';
@@ -28,9 +29,11 @@ import trophy from '../../public/assets/img/trophy.png';
 import { Counter } from "./other_components/Counter.jsx";
 import AnimatedCounter from './other_components/AnimatedCounter.jsx';
 import { AnimatePresence, motion } from "motion/react"
-import { ClickToPlayLottie, ClicktoOpenGift, CoinAnimation } from './animations/Animation.jsx';
+import { ClickToPlayLottie, ClicktoOpenGift, CoinAnimation, LoadingAnimaiton } from './animations/Animation.jsx';
 import ScratchClueCard from './other_components/ScratchCard.jsx';
 import FloatingFab from './other_components/FAB.jsx';
+import { runConfetti } from './other_components/WinConfetti.js';
+import { startCelebrationConfetti } from './other_components/Confetti.js';
 
 
 
@@ -59,22 +62,18 @@ function QuizPage() {
   const [userPoints, setUserPointes] = useState(0);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
   const [play, setPlay] = useState(false);
-  const [isVoucherCode, setVoucherCode] = useState("Complete your badge hunt...");
+  const [isVoucherCode, setVoucherCode] = useState(null);
   const [voucherUnlocked, setVoucherUnlocked] = useState(false);
-  const [showVoucher, setShowVoucher] = useState(true);
+  const [showVoucher, setShowVoucher] = useState(false);
+  const [showCheckAnimation, setShowCheckAnimation] = useState(false)
+  const [loading, setLoading] = useState(false);
+
 
   const [activePopup, setActivePopup] = useState(null);
   const [showCongrats, setShowCongrats] = useState(false);
   const [showClue, setShowClue] = useState(false);
   const [ShowClueBox, setShowClueBox] = useState(false);
   const [showQuizCard, setShowQuizCard] = useState(false);
-
-  // const [isPlayGround, setIsPlayGround] = useState(false);
-  // const [showBadgeSection, setShowBadgeSection] = useState(false);
-  // const [showLeaderboard, setShowLeaderboard] = useState(false);
-
-
-
 
 
 
@@ -154,7 +153,7 @@ function QuizPage() {
 
   //  Controlling the background scroll
   useEffect(() => {
-    if (activePopup !== null) {
+    if (activePopup !== null || ShowClueBox || showCongrats) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -175,11 +174,35 @@ function QuizPage() {
     return () => clearTimeout(delayAnimation)
   })
 
+  useEffect(() => {
+    const preLoadImages = [
+      '/assets/img/exit.png',
+      '/assets/img/gm-bg-2.jpg',
+      '/assets/img/confetti2.png',
+      '/assets/img/you_gift2.png',
+      '/assets/img/coin.png',
+      '/assets/img/button-coin.png',
+      '/assets/img/clue.png',
+    ];
+
+    preLoadImages.forEach((src) => {
+      const img = new Image();
+      img.onload = () => {
+
+      };
+      img.onerror = () => {
+        console.warn(` Failed to load: ${src}`);
+      };
+      img.src = src;
+    });
+  }, []);
+
+
 
 
   // Handle answer submit
-
   const handleSubmit = async () => {
+
     if (!selectedAnswer) {
       setFeedback("Please select an answer before submitting.");
       return;
@@ -188,18 +211,35 @@ function QuizPage() {
     try {
       const result = await submitQuiz(deviceId, posterId, selectedAnswer);
 
-      if (result.correct) {
-        setShowCongrats(true);
 
-        if (result.voucherUnlocked) {
-          setVoucherCode(result.voucherCode)
-          setVoucherUnlocked(true)
+      if (result.correct) {
+        console.log("Result when correct", result)
+        setShowCheckAnimation(true);
+        setTimeout(() => {
+          setShowCheckAnimation(false);
+          setShowCongrats(true);
+        }, 1500);
+
+
+        if (!result.voucherCode) {
+          console.log("Voucher code unavailble")
+          result.voucherCode = "WINCode"
         }
 
 
+        if (result.voucherUnlocked && result.voucherCode) {
+          setVoucherCode(result.voucherCode)
+          setVoucherUnlocked(true)
 
+          localStorage.setItem("voucherInfo", JSON.stringify({
+            unlocked: true,
+            code: result.voucherCode
+          }));
+
+        }
       } else {
         setFeedback(result.message || "Wrong answer, Try again!");
+
       }
     } catch (error) {
       console.error("Error submitting quiz:", error);
@@ -207,10 +247,30 @@ function QuizPage() {
     }
   };
 
+  useEffect(() => {
+  const storedVoucher = localStorage.getItem("voucherInfo");
+  if (storedVoucher) {
+    const { unlocked, code } = JSON.parse(storedVoucher);
+    setVoucherUnlocked(unlocked);
+    setVoucherCode(code);
+  }
+}, []);
+
+
+  // Handling playground loading...
+  const handlePlaygroundLoading = () => {
+    setIsLoadingGame(true);
+    setTimeout(() => {
+      setIsLoadingGame(false);
+      setActivePopup('playground');
+    }, 3500)
+  }
+
 
 
   if (error) return <div className="p-4 text-red-600">{error}</div>
-  if (!questionData) return <div className="p-4">Loading Quiz...</div>;
+
+  if (!questionData) return <div className="p-4"><LoadingAnimaiton /></div>;
 
   return (
 
@@ -252,6 +312,7 @@ function QuizPage() {
             <TypewriterEffectSmootha
               nickName={nickName}
 
+
             />
 
           </div>
@@ -272,40 +333,39 @@ function QuizPage() {
 
 
           </div>
-
           <div className="w-55 mt-2 cursor-pointer">
-            <Lottie
-              animationData={Playbutton}
-              onClick={() => {
-                setIsLoadingGame(true);
-                setTimeout(() => {
-                  setIsLoadingGame(false);
-                  setActivePopup('playground')
-                }, 1800);
-              }}
-            />
+            <div onClick={handlePlaygroundLoading}>
+              <Lottie animationData={Playbutton} />
+            </div>
 
             {isLoadingGame && (
-              <div className="text-white font-bold text-lg mt-4 animate-pulse cursor-pointer">
-                Loading Playground...
+              <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                <div className="text-white font-bold flex flex-col items-center justify-center animate-pulse cursor-pointer space-y-1">
+                  <DotLottieReact
+                    src="https://lottie.host/0987da8e-7dbf-42eb-98e3-2605a9288635/NOKPFE3KRl.lottie"
+                    loop
+                    autoplay
+                  />
+                  <div className="text-white text-lg font-outfit">Loading playground...</div>
+                </div>
               </div>
             )}
-
           </div>
+
+
 
           <button
             className="text-white w-full z-9 text-center py-3 font-outfit underline"
             onClick={() => {
               bannerSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+              startCelebrationConfetti()
+
+
+
             }}
           >
             More info
           </button>
-
-
-
-
-
 
           <div className="text-white text-sm text-center pt-2 mt-3 mx-15 font-outfit">
             Experience Music Festival 2025 – our best year yet with a huge site transformation,
@@ -371,22 +431,6 @@ function QuizPage() {
         <div className=" font-brigada  text-yellow-200 underline mt-3">
           Home
         </div>
-        {/* <div className="w-55 mt-3 cursor-pointer"
-          onClick={() => {
-            setIsLoadingGame(true);
-            setTimeout(() => {
-              setIsLoadingGame(false);
-              gameSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 2500);
-          }}>
-          <Lottie animationData={Playbutton} />
-        </div>
-
-        {isLoadingGame && (
-          <div className="text-white font-bold text-lg mt-4 animate-pulse">
-            Loading Playground...
-          </div>
-        )} */}
 
         {/* <BannerCarousel /> */}
         <div className='h-100 w-100   justify-center items-center md:w-screen'>
@@ -457,7 +501,7 @@ function QuizPage() {
                         value={badgeCount}
                         places={[1]}
                         fontSize={20}
-                        padding={1}
+                        padding={2}
                         gap={3}
                         textColor="white"
                         fontWeight={500} />/ 5
@@ -577,6 +621,19 @@ function QuizPage() {
 
                     </div>
                   )}
+
+                  {showCheckAnimation && (
+                    <div className="fixed inset-0 z-[999] flex justify-center items-center bg-black/50 backdrop-blur-sm">
+
+                      <DotLottieReact
+                        src="https://lottie.host/99c33767-757a-4f1d-94c8-8bccf2cf1dc5/zoZIM6LmR5.lottie"
+                        autoplay
+
+                        className="h-80"
+                      />
+                    </div>
+                  )}
+
                 </AnimatePresence>
 
 
@@ -602,7 +659,7 @@ function QuizPage() {
             </div>
             <div className="absolute inset-0 bg-black bg-opacity-50 mix-blend-multiply rounded-3xl  z-10" />
 
-            <div className=""><img src="/assets/img/badges/badge_1.png" alt="badge" /></div>
+            {/* <div className=""><img src="/assets/img/badges/badge_1.png" alt="badge" /></div> */}
 
 
             {/* Content */}
@@ -620,11 +677,11 @@ function QuizPage() {
 
                 <div className="relative z-20 flex flex-col items-center justify-center">
 
-                  <div className="relative  w-full h-[200px] ">
+                  <div className="relative  w-full h-[200px]  ">
                     <img
-                      src="/assets/img/you_gift.png"
+                      src="/assets/img/you_gift2.png"
                       alt="You_win"
-                      className="absolute  w-[250%] h-[350px] object-contain -top-40"
+                      className="absolute  w-[250%] h-[350px] object-contain bg-opacity-0 -top-40"
                     />
                   </div>
                 </div>
@@ -647,7 +704,7 @@ function QuizPage() {
                             <Lottie
                               animationData={coin_collection}
                               loop={false}
-                              speed={0.5}
+                              speed={1}
                             />
                           )}
                         </div>
@@ -719,8 +776,8 @@ function QuizPage() {
                           setIsLoadingGame(false);
                           setActivePopup('playground')
                         }, 1800);
-                        setTimeout(()=> {setShowClueBox(true)}, 500)
-                      
+                      setTimeout(() => { setShowClueBox(true) }, 500)
+
                     }}>
 
 
@@ -742,21 +799,6 @@ function QuizPage() {
 
               }
 
-              {/* Button */}
-              {/* <button
-                onClick={() => {
-                  setShowCongrats(false);
-                  setShowQuizCard(false);
-                  badgeSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="mt-6 px-6 py-3 bg-black text-yellow-300 rounded-full 
-               hover:scale-105 active:scale-95 transition-all 
-               border-2 border-yellow-300 font-bold shadow-xl "
-              >
-                Collect Badge
-              </button> */}
-
-
 
             </div>
 
@@ -776,20 +818,33 @@ function QuizPage() {
         <section className=' fixed inset-0 z-[999] h-screen w-screen flex justify-center items-center backdrop-blur-sm'>
           <div className=" w-full">
             {showClue && (
-              <motion.div
-                initial={{ y: 200, opacity: 0, scale: 0.5 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
+              <>
+                <motion.div
+                  initial={{ y: 200, opacity: 0, scale: 0.5 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
 
-                className="text-white h-full flex flex-col justify-center items-center">
-                <ScratchClueCard
-                  clueText={questionData.clue}
-                  className="drop-shadow-xl "
-                  setActivePopup={setActivePopup}
-                  closeClueBox={setShowClueBox}
-                  closeClueCard={setShowClue}
-                   />
-              </motion.div>
+                  className="text-white h-full flex flex-col justify-center items-center">
+                  <ScratchClueCard
+                    clueText={questionData.clue}
+                    className="drop-shadow-xl"
+                    closeClueBox={setShowClueBox}
+                    closeClueCard={setShowClue}
+                    onRevealComplete={() => {
+                      setActivePopup('badges');
+                      setTimeout(() => {
+                        if (voucherUnlocked) {
+                          setActivePopup('voucher');
+                          startCelebrationConfetti()
+
+                        }
+                      }, 2000)
+                    }}
+                  />
+                </motion.div>
+
+              </>
+
             )
             }
 
@@ -805,13 +860,20 @@ function QuizPage() {
             </motion.div>
 
 
-            <motion.div
-              initial={{ y: 200, opacity: 0, scale: 0.5 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
 
-              className="absolute z-90 top-0 ">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+
+              className="items-center  mx-5 text-white z-1999 font-bold drop-shadow-md  font-outfit text-lg text-center">
+              {showClue ? <p><span className='font-lucky text-yellow-200 tracking-wider text-3xl'>Boom!</span>
+                <br /> That clue might be your ticket to victory.</p> : "Click to open"}
+
             </motion.div>
+
+
           </div>
         </section>
       )}
@@ -844,7 +906,7 @@ function QuizPage() {
 
             className='fixed inset-0  h-screen w-screen  z-20 flex justify-center items-center backdrop-blur-xl' >
             <div ref={badgeSectionRef}>
-              <Badge deviceId={deviceId} leaderboardRef={LeaderBoardSecRef} setActivePopup={setActivePopup} />
+              <Badge deviceId={deviceId} leaderboardRef={LeaderBoardSecRef} setActivePopup={setActivePopup} onLoading={<LoadingAnimaiton/>}/>
             </div>
           </motion.div>
         )
@@ -862,7 +924,7 @@ function QuizPage() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className='fixed inset-0  h-screen w-screen  z-20 flex justify-center items-center backdrop-blur-xl '>
             <div ref={LeaderBoardSecRef} >
-              <LeaderBoard setActivePopup={setActivePopup} />
+              <LeaderBoard setActivePopup={setActivePopup} onLoading={<LoadingAnimaiton/>} />
             </div>
           </motion.div>
         )}
@@ -871,18 +933,29 @@ function QuizPage() {
 
 
         {/* Voucher------------------ */}
-        {activePopup === 'voucher' && showVoucher && (
+        {activePopup === 'voucher' && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="fixed inset-0  h-screen w-screen z-20 flex justify-center items-center backdrop-blur-xl">
+
             <div ref={voucherRef} className="w-full h-full flex justify-center items-center  px-4">
               <Voucher value={isVoucherCode} voucherUnlocked={voucherUnlocked} setActivePopup={setActivePopup} />
             </div>
+
           </motion.div>
         )}
+
+
+        {loading && (
+          <div className="absolute inset-0 h-screen w-full z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+            <LoadingAnimaiton />
+          </div>
+        )}
+
+
 
       </AnimatePresence>
 
@@ -893,7 +966,8 @@ function QuizPage() {
       <div className="fixed bottom-6 right-6 flex flex-col items-end space-y-2 z-[1000]">
         <FloatingFab
           setActivePopup={setActivePopup}
-          scrollToHeroSection={scrollToHeroSection} />
+          scrollToHeroSection={scrollToHeroSection}
+          openPlayGround={handlePlaygroundLoading} />
       </div>
     </>
 

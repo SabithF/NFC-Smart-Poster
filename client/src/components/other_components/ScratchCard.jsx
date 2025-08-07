@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-export default function ScratchClueCard({ clueText, setActivePopup, closeClueBox, closeClueCard }) {
+export default function ScratchClueCard({ clueText, closeClueBox, closeClueCard, onRevealComplete }) {
     const canvasRef = useRef(null);
     const [scratched, setScratched] = useState(false);
 
@@ -68,9 +68,10 @@ export default function ScratchClueCard({ clueText, setActivePopup, closeClueBox
             const scratchedPercent = scratchedPixels / (width * height) * 100;
             if (scratchedPercent > 30)
                 setScratched(true);
-                setActivePopup('badges');
                 closeClueBox(false);
                 closeClueCard(false);
+                
+                if (onRevealComplete) onRevealComplete()
             
 
             if (scratched) {

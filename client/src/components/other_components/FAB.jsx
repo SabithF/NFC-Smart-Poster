@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 
-export default function FloatingFab({setActivePopup, scrollToHeroSection }) {
+export default function FloatingFab({setActivePopup, scrollToHeroSection, openPlayGround }) {
   const [isOpen, setIsOpen] = useState(false);
   const fabRef = useRef(null);
 
@@ -18,7 +18,7 @@ export default function FloatingFab({setActivePopup, scrollToHeroSection }) {
 
     { label: 'Playground', img: '/assets/img/btn/playground_btn_1.png', 
       onClick: () => {
-        setActivePopup('playground')
+        openPlayGround()
         setIsOpen(false)} },
 
     { label: 'Badges', img: '/assets/img/btn/badge.png', 

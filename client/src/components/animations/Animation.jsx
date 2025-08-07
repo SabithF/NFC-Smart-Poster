@@ -4,6 +4,7 @@ import chest_opening from '../../assets/chest_opening.json'
 import gift_opening from '../../assets/gift_box.json'
 import gift_opening_2 from '../../assets/gift_box2.json'
 import coin_collection from '../../assets/coin_collection.json'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 
 
 
@@ -62,4 +63,15 @@ export function CoinAnimation () {
             autoplay
             />
     )
+}
+
+export function LoadingAnimaiton () {
+  return(
+    <DotLottieReact
+      src="https://lottie.host/f034d88d-f949-40a1-952d-5faf748922cb/LJWo70sQG4.lottie"
+      loop
+      autoplay
+    />
+    
+  )
 }

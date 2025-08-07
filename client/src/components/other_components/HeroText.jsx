@@ -9,7 +9,7 @@ export function TypewriterEffectSmootha({ nickName, message, onPlayClick }) {
     const words = [
         {
             text: nickName,
-            className: "dark:text-yellow-500 text-2xl tracking-wider font-midorima"
+            className: "text-yellow-500 text-xl md:text-2xl tracking-wider font-midorima"
         },
     ];
 
