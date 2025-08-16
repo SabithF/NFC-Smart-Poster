@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Alert from '../other_components/Alert';
 
 const isLocalhost = window.location.hostname === 'localhost';
-
 const LOCAL_IP = '192.168.0.127';
 
 const BASE_URL = isLocalhost
   ? 'http://localhost:8080/api/posters'
   : `http://${LOCAL_IP}:8080/api/posters`;
 
-const PosterForm = ({ onClose, onPosterCreated, editPoster  }) => {
+const PosterForm = ({ onClose, onPosterCreated, editPoster }) => {
   const [form, setForm] = useState({
     posterId: '',
     question: '',
     options: ['', '', '', ''],
     correctAnswer: '',
-    nextClue: ''
+    nextClue: '',
   });
 
-  useEffect(()=> {
-    if (editPoster) {
-      setForm(editPoster);
-    }
+  const [alertBox, setAlertBox] = useState(null);
+
+  useEffect(() => {
+    if (editPoster) setForm(editPoster);
   }, [editPoster]);
+
+  // useEffect(() => {
+  //   if (!alertBox) return;
+  //   const t = setTimeout(() => setAlertBox(null), 3000);
+  //   return () => clearTimeout(t);
+  // }, [alertBox]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith('option')) {
-      const index = parseInt(name.slice(-1));
+      const index = parseInt(name.slice(-1), 10);
       const updatedOptions = [...form.options];
       updatedOptions[index] = value;
       setForm({ ...form, options: updatedOptions });
@@ -39,58 +45,88 @@ const PosterForm = ({ onClose, onPosterCreated, editPoster  }) => {
   const addOption = () => {
     setForm((prevForm) => ({
       ...prevForm,
-      options: [...prevForm.options, '']
+      options: [...prevForm.options, ''],
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if(editPoster) {
-        await axios.put(`${BASE_URL}/update/${editPoster.posterId}`, form)
-        alert("Poster updated successfully");
-      }else {
+      if (editPoster) {
+        await axios.put(`${BASE_URL}/update/${editPoster.posterId}`, form);
+        setAlertBox({
+          type: 'success',
+          title: 'Updated',
+          message: 'Poster updated successfully.',
+        });
+      } else {
         await axios.post(`${BASE_URL}/create`, form);
-        alert("Poster created successfully!");
-
+        setAlertBox({
+          type: 'success',
+          title: 'Created',
+          message: 'Poster created successfully.',
+        });
       }
-      
-      
-      
 
       setForm({
         posterId: '',
         question: '',
         options: ['', '', '', ''],
         correctAnswer: '',
-        nextClue: ''
+        nextClue: '',
       });
-      onPosterCreated()
-      onClose();
-      
+
+      onPosterCreated?.();
+
+      setTimeout(() => {
+        onClose?.();
+      }, 800);
     } catch (error) {
-      alert("Failed to create poster");
+      setAlertBox({
+        type: 'error',
+        title: 'Error',
+        message:
+          error?.response?.data?.error ||
+          'Failed to save poster. Please try again.',
+      });
       console.error(error);
     }
   };
 
   return (
-    
-       <div className="fixed inset-0 z-50 overflow-y-auto scrollbar-hide no-scrollbar flex items-center justify-center bg-black/40">
-        <div className="bg-slate-800 p-8 rounded-2xl shadow-2xl w-full no-scrollbar max-w-lg max-h-[90vh] overflow-y-auto relative">
-          <button
-            onClick={onClose}
-            className="absolute top-2 right-4 text-white text-xl font-bold hover:text-red-500"
+    <div className="fixed inset-0 z-50 overflow-y-auto scrollbar-hide no-scrollbar flex items-center justify-center bg-black/40">
+      
+      
+      {alertBox && (
+        <div className="fixed top-4 right-4 z-[1000] space-y-3 pointer-events-none">
+          <Alert
+            variant={alertBox.type}
+            title={alertBox.title}
+            onClose={() => setAlertBox(null)}
+            className="pointer-events-auto w-80"
           >
-            &times;
-          </button>
+            {alertBox.message}
+          </Alert>
+        </div>
+      )}
 
-          <h2 className="text-2xl font-bold mb-6 text-white text-center">Create New Poster</h2>
+      <div className="bg-slate-800 p-8 rounded-2xl shadow-2xl w-full no-scrollbar max-w-lg max-h-[90vh] overflow-y-auto relative">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-4 text-white text-xl font-bold hover:text-red-500"
+        >
+          &times;
+        </button>
 
+        <h2 className="text-2xl font-bold mb-6 text-white text-center">
+          Create New Poster
+        </h2>
 
-        <form onSubmit={handleSubmit} className='overflow-auto'>
+        <form onSubmit={handleSubmit} className="overflow-auto">
           <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium text-white">Poster ID</label>
+            <label className="block mb-1 text-sm font-medium text-white">
+              Poster ID
+            </label>
             <input
               type="text"
               name="posterId"
@@ -102,7 +138,9 @@ const PosterForm = ({ onClose, onPosterCreated, editPoster  }) => {
           </div>
 
           <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium text-white">Question</label>
+            <label className="block mb-1 text-sm font-medium text-white">
+              Question
+            </label>
             <input
               type="text"
               name="question"
@@ -114,7 +152,9 @@ const PosterForm = ({ onClose, onPosterCreated, editPoster  }) => {
           </div>
 
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium text-white">Options</label>
+            <label className="block mb-2 text-sm font-medium text-white">
+              Options
+            </label>
             {form.options.map((opt, index) => (
               <input
                 key={index}
@@ -137,7 +177,9 @@ const PosterForm = ({ onClose, onPosterCreated, editPoster  }) => {
           </div>
 
           <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium text-white">Correct Answer</label>
+            <label className="block mb-1 text-sm font-medium text-white">
+              Correct Answer
+            </label>
             <select
               name="correctAnswer"
               value={form.correctAnswer}
@@ -145,21 +187,19 @@ const PosterForm = ({ onClose, onPosterCreated, editPoster  }) => {
               required
               className="w-full p-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white"
             >
-            <option value =""> Select correct answer
-
-            </option>
-
-            {form.options.map((opt, index) =>(
-               <option key={index} value={opt}>
-                {opt || `Option ${index + 1}`}
-               </option>
-            ))}
+              <option value=""> Select correct answer</option>
+              {form.options.map((opt, index) => (
+                <option key={index} value={opt}>
+                  {opt || `Option ${index + 1}`}
+                </option>
+              ))}
             </select>
-            
           </div>
 
           <div className="mb-6">
-            <label className="block mb-1 text-sm font-medium text-white">Next Clue</label>
+            <label className="block mb-1 text-sm font-medium text-white">
+              Next Clue
+            </label>
             <input
               type="text"
               name="nextClue"
@@ -173,13 +213,11 @@ const PosterForm = ({ onClose, onPosterCreated, editPoster  }) => {
             type="submit"
             className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5 rounded-lg"
           >
-            {editPoster ? "Update": "Create poster"}
-
+            {editPoster ? 'Update' : 'Create poster'}
           </button>
         </form>
       </div>
-      </div>
-   
+    </div>
   );
 };
 

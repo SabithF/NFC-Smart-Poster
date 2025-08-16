@@ -13,6 +13,8 @@ import Dashboard from './components/admin/Dashboard.jsx'
 import UserDashBoard from './components/admin/UserDashBoard.jsx';
 import VoucherDashBoard from './components/admin/VoucherDashBoard.jsx';
 import MainPage from './components/MainPage.jsx';
+import AlreadyScannedPage from './components/AlreadyScanned.jsx';
+import ErrorPage from './components/404Page.jsx';
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
 
   return (
     <Router>
-      <Routes>S
+      <Routes>
         <Route path="/quiz/:posterId" element={<QuizPage />} />
         <Route path="/badge" element={<Badge />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
@@ -29,6 +31,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/users" element={<UserDashBoard/>}/>
         <Route path="/vouchers" element={<VoucherDashBoard/>} />
+        <Route path="/alreadyScanned" element={<AlreadyScannedPage/>}/>
         <Route path="/result" element={
           <div>
             <h1>Quiz Result</h1>
@@ -38,7 +41,7 @@ function App() {
           </div>
         } />
         <Route path="/" element={<MainPage/> } />
-         <Route path="*" element={<div>404 Not Found</div>} />
+         <Route path="*" element={<ErrorPage/>} />
       </Routes>
     </Router>
   );

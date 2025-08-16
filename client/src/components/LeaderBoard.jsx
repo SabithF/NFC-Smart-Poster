@@ -11,7 +11,7 @@ const rankStyles = {
 }
 
 
-export default function LeaderBoard({ setActivePopup, onLoading }) {
+export default function LeaderBoard({ setActivePopup, onLoading, points }) {
   const { deviceId: currentDeviceId, nickName: currentNickName } = uniqueDevice();
   const [leader, setLeader] = useState([]);
   const [loading, setLoading] = useState(true)

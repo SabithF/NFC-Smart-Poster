@@ -10,6 +10,7 @@ const allBadges = [
     { id: 'p10', name: 'Retro Tuner', image: 'Badge_3' },
     { id: 'p9', name: 'Volume Booster', image: 'Badge_4' },
     { id: 'p5', name: 'Rhythm Rider', image: 'Badge_5' },
+    { id: 'p11', name: 'Rhythm Rider', image: 'Badge_5' },
 ];
 
 export default function Badge({ deviceId , setActivePopup, onLoading }) {
@@ -35,6 +36,7 @@ export default function Badge({ deviceId , setActivePopup, onLoading }) {
 
         fetchBadges();
     }, [deviceId]);
+  
 
     const progress = unlockedBadges.length / allBadges.length * 100;
 

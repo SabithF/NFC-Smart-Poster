@@ -325,19 +325,12 @@ class App {
   }
   createMedias(items, bend = 1, textColor, borderRadius, font) {
     const defaultItems = [
-      { image: `https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg`, text: "30th Jul" },
-      { image: `https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg`, text: "15th Sep" },
-      { image: `https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg`, text: "16th Sep" },
-      { image: `https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg`, text: "30th Jul" },
-      { image: `https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg`, text: "17th Sep" },
-      { image: `https://images.pexels.com/photos/167491/pexels-photo-167491.jpeg`, text: "18th Sep" },
-      { image: `https://images.pexels.com/photos/196652/pexels-photo-196652.jpeg`, text: "19th Sep" },
-      { image: `https://images.pexels.com/photos/167491/pexels-photo-167491.jpeg`, text: "20th Sep" },
-    //   { image: `https://images.pexels.com/photos/1387174/pexels-photo-1387174.jpeg`, text: "15th Sep" },
-    //   { image: `https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg`, text: "15th Sep" },
-    //   { image: `https://images.pexels.com/photos/1306791/pexels-photo-1306791.jpeg`, text: "15th Sep" },
-    //   { image: `https://images.pexels.com/photos/1943411/pexels-photo-1943411.jpeg`, text: "15th Sep" },
-    //   { image: `https://images.pexels.com/photos/1494665/pexels-photo-1494665.jpeg`, text: "15th Sep" },
+    { image: `/assets/img/concert/1.jpg`, text: "30th Jul" },
+      {  image: `/assets/img/concert/4.jpg`, text: "15th Sep" },
+      {  image: `/assets/img/concert/3.jpg`, text: "16th Sep" },
+      {  image: `/assets/img/concert/2.jpg`, text: "30th Jul" },
+      
+
       
     ];
     const galleryItems = items && items.length ? items : defaultItems;

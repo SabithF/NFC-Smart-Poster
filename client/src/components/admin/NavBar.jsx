@@ -26,7 +26,7 @@ export default function NavBar () {
           <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             {/* Logo */}
             <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-              <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Logo" />
+              <img src="/assets/img/Logo.png" className="h-12" alt="Logo" />
               <span className="self-center text-2xl font-semibold dark:text-white whitespace-nowrap">
                 NFC Smart Poster
               </span>

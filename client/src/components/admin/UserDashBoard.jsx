@@ -46,7 +46,7 @@ return (
                     {/* title and button */}
                     <div className="flex w-full px-6 py-4 items-center justify-between">
                         <div className="text-white font-semibold tracking-widest text-xl">
-                            Poster Management
+                            User Management
                         </div>
                         <button
                             type="button"

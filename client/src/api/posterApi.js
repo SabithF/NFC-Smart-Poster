@@ -3,14 +3,14 @@ const isLocalhost = window.location.hostname === 'localhost';
 const LOCAL_IP = '192.168.0.127';
 
 const BASE_URL = isLocalhost
-  ? 'http://localhost:8080/api/posters'
-  : `http://${LOCAL_IP}:8080/api/posters`;
+    ? 'http://localhost:8080/api/posters'
+    : `http://${LOCAL_IP}:8080/api/posters`;
 
 const USER_URL = isLocalhost
-  ? 'http://localhost:8080/api/users'
-  : `http://${LOCAL_IP}:8080/api/users`;
+    ? 'http://localhost:8080/api/users'
+    : `http://${LOCAL_IP}:8080/api/users`;
 
-// API function to fetch posters based on deviceId and posterId
+//API function to fetch posters based on deviceId and posterId
 export const scanPoster = async (deviceId, posterId) => {
     try {
         const res = await fetch(`${BASE_URL}/scan`, {
@@ -21,29 +21,76 @@ export const scanPoster = async (deviceId, posterId) => {
             body: JSON.stringify({ deviceId, posterId }),
         });
         return await res.json();
-        
+
     } catch (error) {
         console.error('Error fetching posters:', error);
     }
 };
 
+// export const scanPoster = async (deviceId, posterId) => {
+//   try {
+//     const res = await fetch(`${BASE_URL}/scan`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ deviceId, posterId }),
+//     });
+
+//     let data = null;
+//     try {
+//       data = await res.json();
+//     } catch {
+//       data = null; 
+//     }
+//     if (!res.ok) {
+//       const message =
+//         data?.message ||
+//         data?.error ||
+//         `Request failed with status ${res.status}`;
+
+//       if (message === "Poster already scanned.") {
+//         return { alreadyScanned: true, message };
+//       }
+
+      
+//       return { error: true, message, status: res.status, data };
+//     }
+
+//     // Success
+//     return data; 
+//   } catch (err) {
+    
+//     console.error("scanPoster failed:", err);
+//     return {
+//       error: true,
+//       message: err?.message || "Network error during scan",
+//     };
+//   }
+// };
+
+
+
+
+
 // APi function to fetch user progile 
+
+
+
 export const getUserProfile = async (deviceId) => {
     try {
         const res = await fetch(`${USER_URL}/${deviceId}`);
-        if(!res.ok) throw new Error('User not found');
+        if (!res.ok) throw new Error('User not found');
         return await res.json();
-        
-        
+
+
     } catch (error) {
         console.error('Error fetching user profile:', error);
-        return null; 
+        return null;
     }
 
 }
 
 // API function to submit quiz answers
-export const submitQuiz = async (deviceId, posterId, selectedAnswer) =>{
+export const submitQuiz = async (deviceId, posterId, selectedAnswer) => {
     try {
         const res = await fetch(`${BASE_URL}/quiz`, {
             method: 'POST',
@@ -54,7 +101,7 @@ export const submitQuiz = async (deviceId, posterId, selectedAnswer) =>{
 
         });
         return await res.json();
-        
+
     } catch (error) {
         console.error('Error submitting quiz:', error);
     }

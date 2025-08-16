@@ -10,18 +10,14 @@ import Voucher from '../models/voucher.js'
 export const scanPoster = async (req, res) => {
   const { deviceId, posterId } = req.body;
 
-  console.log('📩 Incoming scan request:', { deviceId, posterId });
-
   if (!deviceId || !posterId) {
     return res.status(400).json({ error: 'Missing deviceId or posterId' });
-
   }
 
   // Get the user's IP address
   const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
   const ip = rawIp?.startsWith('::ffff:') ? rawIp.replace('::ffff:', '') : rawIp;
-
-
+  
   try {
     let user = await User.findOne({ $or: [{ deviceId }, { deviceIp: ip }] });
 
@@ -44,7 +40,6 @@ export const scanPoster = async (req, res) => {
       });
 
       await user.save();
-      console.log('✅ User saved to DB:', user);
     } else {
       if (!user.scannedPosters?.includes(posterId)) {
         user.scannedPosters.push(posterId);
@@ -53,7 +48,7 @@ export const scanPoster = async (req, res) => {
     }
 
     if (user.badges.includes(posterId)) {
-      return res.status(400).json({ message: 'Poster already scanned.' });
+      return res.status(200).json({ message: 'Poster already scanned.' });
     }
 
     if (!user.scannedPosters.includes(posterId)) {
@@ -61,8 +56,6 @@ export const scanPoster = async (req, res) => {
     }
 
     const poster = await Poster.findOne({ posterId });
-
-    console.log('📌 Poster found:', poster);
 
     if (!poster) {
       return res.status(404).json({ error: 'Poster not found' });
@@ -133,10 +126,7 @@ export const submitQuiz = async (req, res) => {
 
       if (voucher) {
         userVoucherCode = voucher.voucherCode;
-        console.log('🎟️ Voucher found:', voucher.voucherCode);
-        console.log('👤 User ID:', user._id);
-        console.log('📜 Already redeemed:', voucher.redeemedUsers);
-
+        
         // const alreadyRedeemed = voucher.redeemedUsers.some(id => String(id) === String(user._id));
         const alreadyRedeemed = voucher.redeemedUsers.includes(user._id)
 
