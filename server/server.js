@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import connect from './database/conn.js';
 import posterRoutes from './routers/posterRoutes.js';
+import userRouter from './routers/userRouter.js';
+
 
 dotenv.config();
 
@@ -17,6 +19,7 @@ app.use(express.json());
 
 
 app.use('/api/posters', posterRoutes);
+app.use('/api/users', userRouter);
 
 console.log('Env Port',process.env.PORT);
 

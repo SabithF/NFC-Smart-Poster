@@ -1,9 +1,5 @@
-@tailwindcss/vite
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
 
-.head{
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #333;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
