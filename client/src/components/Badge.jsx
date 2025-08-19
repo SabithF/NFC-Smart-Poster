@@ -7,10 +7,10 @@ import { AnimatedProgressBar } from './other_components/ProgressBar.jsx'
 const allBadges = [
     { id: 'p1', name: 'Mixtape Explorer', image: 'Badge_1' },
     { id: 'p2', name: 'Tour Tracker', image: 'Badge_2' },
-    { id: 'p10', name: 'Retro Tuner', image: 'Badge_3' },
-    { id: 'p9', name: 'Volume Booster', image: 'Badge_4' },
+    { id: 'p3', name: 'Retro Tuner', image: 'Badge_3' },
+    { id: 'p4', name: 'Volume Booster', image: 'Badge_4' },
     { id: 'p5', name: 'Rhythm Rider', image: 'Badge_5' },
-    { id: 'p11', name: 'Rhythm Rider', image: 'Badge_5' },
+    { id: 'p6', name: 'Music Hunter', image: 'Badge_2' },
 ];
 
 export default function Badge({ deviceId , setActivePopup, onLoading }) {

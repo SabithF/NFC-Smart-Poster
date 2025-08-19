@@ -27,8 +27,6 @@ export const scanPoster = async (req, res) => {
       const nickName = randomNickName();
       const userUniqueId = await generateUserNumber();
 
-      console.log('🆕 Creating user with:', { nickName, userUniqueId, ip });
-
       user = new User({
         deviceId,
         nickName,
@@ -43,14 +41,11 @@ export const scanPoster = async (req, res) => {
     } else {
       if (!user.scannedPosters?.includes(posterId)) {
         user.scannedPosters.push(posterId);
-        console.log('📌 Poster added to user:', posterId);
       }
     }
-
     if (user.badges.includes(posterId)) {
       return res.status(200).json({ message: 'Poster already scanned.' });
     }
-
     if (!user.scannedPosters.includes(posterId)) {
       user.scannedPosters.push(posterId);
     }
@@ -102,23 +97,20 @@ export const submitQuiz = async (req, res) => {
 
     if (!user.badges.includes(posterId)) {
       user.badges.push(posterId);
-
+      
       // Voucher logic: unlock if 5 badges collected
       const voucherScanCount = 5;
+
       if (user.badges.length >= voucherScanCount) user.voucherUnlocked = true;
       await user.save();
     }
-
     // obtaining voucher code-------------------------
     let userVoucherCode = null;
 
     const allVouchers = await Voucher.findOne()
-    console.log("All vouchers", allVouchers)
-
     if (user.voucherUnlocked) {
       const voucher = await Voucher.findOne({
-        // expiryDate: { gt: new Date() } $,
-        // redeemedUsers: { ne: user._id }
+        
 
       });
 
@@ -131,15 +123,14 @@ export const submitQuiz = async (req, res) => {
         const alreadyRedeemed = voucher.redeemedUsers.includes(user._id)
 
         if (!alreadyRedeemed) {
-          console.log("🆕 Pushing user._id to voucher:", user._id);
           voucher.redeemedUsers.push(user._id);
           await voucher.save();
 
         } else {
-          console.log("✅ User already in redeemed list.");
+          console.log("User already in redeemed list.");
         }
       } else {
-        console.log("⚠️ No voucher found or expired.");
+        console.log("No voucher found or expired.");
       }
     }
     res.json({

@@ -32,16 +32,8 @@ function App() {
         <Route path="/users" element={<UserDashBoard/>}/>
         <Route path="/vouchers" element={<VoucherDashBoard/>} />
         <Route path="/alreadyScanned" element={<AlreadyScannedPage/>}/>
-        <Route path="/result" element={
-          <div>
-            <h1>Quiz Result</h1>
-            <p>Thank you for participating!</p>
-            <p>Your Device ID: {deviceId}</p>
-            <p>Your Nickname: {nickName}</p>
-          </div>
-        } />
         <Route path="/" element={<MainPage/> } />
-         <Route path="*" element={<ErrorPage/>} />
+        <Route path="*" element={<ErrorPage/>} />
       </Routes>
     </Router>
   );

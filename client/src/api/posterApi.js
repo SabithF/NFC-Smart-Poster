@@ -27,54 +27,8 @@ export const scanPoster = async (deviceId, posterId) => {
     }
 };
 
-// export const scanPoster = async (deviceId, posterId) => {
-//   try {
-//     const res = await fetch(`${BASE_URL}/scan`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ deviceId, posterId }),
-//     });
-
-//     let data = null;
-//     try {
-//       data = await res.json();
-//     } catch {
-//       data = null; 
-//     }
-//     if (!res.ok) {
-//       const message =
-//         data?.message ||
-//         data?.error ||
-//         `Request failed with status ${res.status}`;
-
-//       if (message === "Poster already scanned.") {
-//         return { alreadyScanned: true, message };
-//       }
-
-      
-//       return { error: true, message, status: res.status, data };
-//     }
-
-//     // Success
-//     return data; 
-//   } catch (err) {
-    
-//     console.error("scanPoster failed:", err);
-//     return {
-//       error: true,
-//       message: err?.message || "Network error during scan",
-//     };
-//   }
-// };
-
-
-
-
 
 // APi function to fetch user progile 
-
-
-
 export const getUserProfile = async (deviceId) => {
     try {
         const res = await fetch(`${USER_URL}/${deviceId}`);
