@@ -124,4 +124,12 @@ Create `client/.env.production`
 VITE_API_BASE_URL=http:/yourlocalip/api
 
 # env files are uploaded for demonstration purposes
+```
 
+Example link structure for testing 
+```bash
+http://localhost:5173/quiz/<poster id>
+
+poster id = p1, p2, p3, ...
+```
+ 
