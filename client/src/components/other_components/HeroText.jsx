@@ -8,7 +8,7 @@ import Playbutton from '../../assets/play-button.json';
 export function TypewriterEffectSmootha({ nickName, message, onPlayClick }) {
     const words = [
         {
-            text: nickName,
+            text: nickName || "Thinking a name for you..",
             className: "text-yellow-500 text-xl md:text-2xl tracking-wider font-midorima"
         },
     ];

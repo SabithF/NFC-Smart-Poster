@@ -12,7 +12,15 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+
+app.use(cors({
+  origin: process.env.CORS_ORIGINS?.split(",") || ["http://localhost:5173"],
+  credentials: true
+}));
+
+// app.use(cors());
+
+
 app.use(morgan('tiny'))
 app.use(express.json());
 // Routers
@@ -26,7 +34,7 @@ console.log('Env Port',process.env.PORT);
 // Server and Database Connection
 connect().then(() => {
     try {
-        app.listen(process.env.PORT, () => {
+        app.listen(process.env.PORT, '0.0.0.0',() => {
             console.log(`Server is running on port ${process.env.PORT}`);
         });
     } catch (error) {

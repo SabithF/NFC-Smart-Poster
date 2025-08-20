@@ -1,14 +1,7 @@
-const isLocalhost = window.location.hostname === 'localhost';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
-const LOCAL_IP = '192.168.0.127';
-
-const BASE_URL = isLocalhost
-    ? 'http://localhost:8080/api/posters'
-    : `http://${LOCAL_IP}:8080/api/posters`;
-
-const USER_URL = isLocalhost
-    ? 'http://localhost:8080/api/users'
-    : `http://${LOCAL_IP}:8080/api/users`;
+export const BASE_URL = `${API_BASE}/posters`;
+export const USER_URL = `${API_BASE}/users`;
 
 //API function to fetch posters based on deviceId and posterId
 export const scanPoster = async (deviceId, posterId) => {
@@ -20,6 +13,7 @@ export const scanPoster = async (deviceId, posterId) => {
             },
             body: JSON.stringify({ deviceId, posterId }),
         });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
 
     } catch (error) {
@@ -27,57 +21,12 @@ export const scanPoster = async (deviceId, posterId) => {
     }
 };
 
-// export const scanPoster = async (deviceId, posterId) => {
-//   try {
-//     const res = await fetch(`${BASE_URL}/scan`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ deviceId, posterId }),
-//     });
-
-//     let data = null;
-//     try {
-//       data = await res.json();
-//     } catch {
-//       data = null; 
-//     }
-//     if (!res.ok) {
-//       const message =
-//         data?.message ||
-//         data?.error ||
-//         `Request failed with status ${res.status}`;
-
-//       if (message === "Poster already scanned.") {
-//         return { alreadyScanned: true, message };
-//       }
-
-      
-//       return { error: true, message, status: res.status, data };
-//     }
-
-//     // Success
-//     return data; 
-//   } catch (err) {
-    
-//     console.error("scanPoster failed:", err);
-//     return {
-//       error: true,
-//       message: err?.message || "Network error during scan",
-//     };
-//   }
-// };
-
-
-
-
 
 // APi function to fetch user progile 
-
-
-
 export const getUserProfile = async (deviceId) => {
     try {
         const res = await fetch(`${USER_URL}/${deviceId}`);
+        if (res.status === 404) return null;
         if (!res.ok) throw new Error('User not found');
         return await res.json();
 
@@ -129,3 +78,27 @@ export const getLeaderboard = async () => {
     }
 };
 
+
+export const createUser = async (deviceId, nickName = null) => {
+    try {
+        const res = await fetch(`${USER_URL}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deviceId, nickName }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+    } catch (error) {
+        console.error('Error creating user:', error);
+        return null;
+    }
+};
+
+export const getOrCreateUserProfile = async (deviceId) => {
+    const existing = await getUserProfile(deviceId);
+    if (existing) return existing;
+
+    const created = await createUser(deviceId);
+    return created || (await new Promise(r => setTimeout(r, 300))
+        .then(() => getUserProfile(deviceId)));
+};
