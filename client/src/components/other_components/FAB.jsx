@@ -128,10 +128,6 @@ export default function FloatingFab({setActivePopup, scrollToHeroSection, openPl
             alt="FAB-icon"
             className='' />
 
-
-          {/* {isOpen ? 
-          '×' : '+'} */}
-
           <span className="absolute top-1 w-2/3 h-0.5 bg-white/70 blur-sm rounded-full"></span>
           <span className="absolute bottom-1 w-2/3 h-0.5 bg-white/20 blur-sm rounded-full"></span>
         </button>

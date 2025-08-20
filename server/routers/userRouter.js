@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
           scannedPosters: [],
           scanCount: 0,
           voucherUnlocked: false,
-          ...(deviceIp ? { deviceIp } : {}),
+          ...(body.deviceIp ? { deviceIp: body.deviceIp } : {}), 
           
         },
       },

@@ -12,7 +12,6 @@ import Voucher from './Voucher.jsx';
 import { GridBackground } from './other_components/GridBackground';
 import { Spotlight } from './other_components/spotlight';
 import MainPage from './MainPage.jsx';
-import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc';
 import Lottie from 'lottie-react';
 import welcome from '../assets/Welcome.json'
 import coin_collection from '../assets/coin_collection.json'
@@ -27,7 +26,6 @@ import Playbutton from '../assets/play-button.json';
 import { StarIcon } from './const/Icons.jsx';
 import trophy from '../../public/assets/img/trophy.png';
 import { Counter } from "./other_components/Counter.jsx";
-import AnimatedCounter from './other_components/AnimatedCounter.jsx';
 import { AnimatePresence, motion } from "motion/react"
 import { ClickToPlayLottie, ClicktoOpenGift, CoinAnimation, LoadingAnimaiton } from './animations/Animation.jsx';
 import ScratchClueCard from './other_components/ScratchCard.jsx';
@@ -209,7 +207,7 @@ function QuizPage() {
   }, []);
 
 
-  // showCongratulation
+  // showCongratulation animation
   const backdrop = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.25 } },
@@ -270,6 +268,7 @@ function QuizPage() {
     }
   };
 
+  // Saving vocher status 
   useEffect(() => {
     const storedVoucher = localStorage.getItem("voucherInfo");
     if (storedVoucher) {
@@ -292,10 +291,6 @@ function QuizPage() {
 
 
   if (error) return <div className="p-4 text-red-600">{error}</div>
-
-
-
-  // if (!questionData) return <div className="p-4"><LoadingAnimaiton /></div>;
 
   return (
 
@@ -335,7 +330,7 @@ function QuizPage() {
             <h2 className='font-brigada text-3xl  mb-1 shadow-3xl'>
               {welcomeMessage} </h2>
             <TypewriterEffectSmootha
-              nickName={nickName}/>
+              nickName={nickName} />
 
 
           </div>
@@ -711,7 +706,6 @@ function QuizPage() {
         </motion.div>
       )}
 
-
       {/* Congratulation pop-up ---------------------------------*/}
 
       <AnimatePresence>
@@ -805,9 +799,11 @@ function QuizPage() {
                       <img
                         src={`/assets/img/badges/Badge_${posterId?.replace(/[^\d]/g, '') || 1}.png`}
                         alt="badge"
-                        className='h-80'
+                        className="h-80"
                         onClick={() => { setShowClueBox(true) }}
+                        onError={(e) => { e.currentTarget.src = "/assets/img/badges/Badge_1.png"; }}
                       />
+
                     </div>
                   </motion.div>
                 )}
@@ -945,7 +941,7 @@ function QuizPage() {
 
 
 
-      {/* Badge section------------- */}
+      {/* Badge popup section------------- */}
       <AnimatePresence>
         {activePopup === 'badges' && (
           <motion.div
@@ -964,7 +960,7 @@ function QuizPage() {
 
 
 
-        {/* Leaderboard--------------- */}
+        {/* Leaderboard popup--------------- */}
 
         {activePopup === 'leaderboard' && (
           <motion.div
@@ -982,7 +978,7 @@ function QuizPage() {
 
 
 
-        {/* Voucher------------------ */}
+        {/* Voucher popup------------------ */}
         {activePopup === 'voucher' && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
@@ -999,6 +995,7 @@ function QuizPage() {
         )}
 
 
+        {/* Loading animation */}
         {loading && (
           <div className="absolute inset-0 h-screen w-full z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
             <LoadingAnimaiton />
