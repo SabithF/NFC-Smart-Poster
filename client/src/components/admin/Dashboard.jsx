@@ -5,11 +5,10 @@ import { styles } from '../../styles';
 import PosterForm from './PosterForm';
 import Alert from '../other_components/Alert';
 
-const isLocalhost = window.location.hostname === 'localhost';
-const LOCAL_IP = '192.168.0.127';
-const BASE_URL = isLocalhost
-    ? 'http://localhost:8080/api/posters'
-    : `http://${LOCAL_IP}:8080/api/posters`;
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+
+export const BASE_URL = `${API_BASE}/posters`;
+export const USER_URL = `${API_BASE}/users`;
 
 const Dashboard = () => {
     const [posters, setPosters] = useState([]);
@@ -30,11 +29,10 @@ const Dashboard = () => {
         try {
             await axios.delete(`${BASE_URL}/delete/${posterId}`);
             setPosters((prev) => prev.filter((p) => p.posterId !== posterId));
-            setAlertBox({ type: "success", title: "Deleted", message: `Poster deleted successfully` });
-            // alert('Poster deleted successfully');
+            setAlertBox({ type: 'success', title: 'Deleted', message: `Poster deleted successfully` });
         } catch (error) {
             console.error('Failed to delete poster', error);
-            setAlertBox({ type: "error", title: "Error", message: 'Error deleting poster' });
+            setAlertBox({ type: 'error', title: 'Error', message: 'Error deleting poster' });
         }
     };
 
@@ -53,7 +51,7 @@ const Dashboard = () => {
         const url = makePosterUrl(id);
         try {
             await navigator.clipboard.writeText(url);
-            setAlertBox({ type: "success", title: "Success", message: `Copied: ${url}` });
+            setAlertBox({ type: 'success', title: 'Success', message: `Copied: ${url}` });
         } catch (e) {
             const ta = document.createElement('textarea');
             ta.value = url;
@@ -61,8 +59,7 @@ const Dashboard = () => {
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            setAlertBox({ type: "success", title: "Success", message: `Copied: ${url}` });
-            // alert(`Copied: ${url}`);
+            setAlertBox({ type: 'success', title: 'Success', message: `Copied: ${url}` });
         }
     };
 
@@ -78,7 +75,6 @@ const Dashboard = () => {
 
     return (
         <>
-
             {alertBox && (
                 <div className="fixed top-4 right-4 z-[1000] space-y-3 pointer-events-none">
                     <Alert
@@ -92,10 +88,9 @@ const Dashboard = () => {
                 </div>
             )}
 
-
-            <div className={`${styles.dashBoardBackground} overflow-auto`}>
+            <div className={`${styles.dashBoardBackground} overflow-auto bg-gray-900`}>
                 <NavBar />
-                <div className="flex flex-col overflow-auto justify-center rounded-xl items-center bg-gray-800/10 mt-10 mx-20 shadow-transparent">
+                <div className="flex flex-col overflow-auto justify-center rounded-xl items-center bg-gray-800/50 mt-10 mx-20 shadow-transparent">
                     <div className="flex w-full px-6 py-4 items-center justify-between">
                         <div className="text-white font-semibold tracking-widest font-Poppins text-xl">
                             Poster Management
@@ -103,15 +98,15 @@ const Dashboard = () => {
                         <button
                             type="button"
                             onClick={handleShowForm}
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
                         >
                             + Add Posters
                         </button>
                     </div>
 
                     <div className="w-full overflow-x-auto shadow-md sm:rounded-lg px-7 pt-3 pb-6">
-                        <table className="min-w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-t-xl">
+                        <table className="min-w-full text-sm text-left text-gray-400">
+                            <thead className="text-xs uppercase bg-gray-700 text-gray-400 rounded-t-xl">
                                 <tr>
                                     <th className="px-6 py-3">Poster Id</th>
                                     <th className="px-6 py-3">Questions</th>
@@ -125,10 +120,10 @@ const Dashboard = () => {
                             <tbody>
                                 {posters.map((poster) => (
                                     <tr
-                                        className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
+                                        className="oddbg-gray-900 even:bg-gray-800 border-b :border-gray-700"
                                         key={poster._id}
                                     >
-                                        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <td className="px-6 py-4 font-medium whitespace-nowrap text-white">
                                             {poster.posterId}
                                         </td>
                                         <td className="px-6 py-4">{poster.question}</td>

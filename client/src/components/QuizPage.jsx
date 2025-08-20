@@ -335,10 +335,8 @@ function QuizPage() {
             <h2 className='font-brigada text-3xl  mb-1 shadow-3xl'>
               {welcomeMessage} </h2>
             <TypewriterEffectSmootha
-              nickName={nickName}
+              nickName={nickName}/>
 
-
-            />
 
           </div>
 

@@ -6,7 +6,7 @@ import { generateUserNumber } from '../utils/generateUserNumber.js';
 import Voucher from '../models/voucher.js'
 
 
-//  Handle NFC Scan
+// Handle NFC Scan
 export const scanPoster = async (req, res) => {
   const { deviceId, posterId } = req.body;
 
@@ -19,9 +19,8 @@ export const scanPoster = async (req, res) => {
   const ip = rawIp?.startsWith('::ffff:') ? rawIp.replace('::ffff:', '') : rawIp;
   
   try {
-    let user = await User.findOne({ $or: [{ deviceId }, { deviceIp: ip }] });
-
-    console.log('🔍 User found:', user);
+    // let user = await User.findOne({ $or: [{ deviceId }, { deviceIp: ip }] });
+    let user = await User.findOne({ deviceId });
 
     if (!user) {
       const nickName = randomNickName();
@@ -71,6 +70,9 @@ export const scanPoster = async (req, res) => {
     res.status(500).json({ error: 'Server error during scan' });
   }
 };
+
+
+
 
 
 //  Handle Quiz Submission
@@ -135,7 +137,7 @@ export const submitQuiz = async (req, res) => {
     }
     res.json({
       correct: true,
-      clue: poster.clue,
+      clue: poster.nextClue,
       badges: user.badges,
       voucherUnlocked: user.voucherUnlocked,
       voucherCode: userVoucherCode,

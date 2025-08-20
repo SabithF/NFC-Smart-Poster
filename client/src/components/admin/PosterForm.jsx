@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Alert from '../other_components/Alert';
 
-const isLocalhost = window.location.hostname === 'localhost';
-const LOCAL_IP = '192.168.0.127';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
-const BASE_URL = isLocalhost
-  ? 'http://localhost:8080/api/posters'
-  : `http://${LOCAL_IP}:8080/api/posters`;
+export const BASE_URL = `${API_BASE}/posters`;
+export const USER_URL = `${API_BASE}/users`;
 
 const PosterForm = ({ onClose, onPosterCreated, editPoster }) => {
   const [form, setForm] = useState({

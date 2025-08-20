@@ -6,12 +6,10 @@ import VoucherForm from './VoucherForm'
 
 
 
-const isLocalhost = window.location.hostname === 'localhost';
-const LOCAL_IP = '192.168.0.127';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
-const BASE_URL = isLocalhost
-    ? 'http://localhost:8080/api/posters'
-    : `http://${LOCAL_IP}:8080/api/posters`;
+export const BASE_URL = `${API_BASE}/posters`;
+export const USER_URL = `${API_BASE}/users`;
 
 
 
@@ -37,7 +35,7 @@ return (
 
     <>
 
-    <div className={`${styles.dashBoardBackground} overflow-auto`}>
+    <div className={`${styles.dashBoardBackground} overflow-auto bg-gray-900`}>
         <NavBar />
 
 
@@ -51,9 +49,9 @@ return (
                         <button
                             type="button"
                             
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium 
-                rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 
-                focus:outline-none dark:focus:ring-blue-800"
+                            className="text-white   focus:ring-4  font-medium 
+                rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 
+                focus:outline-none focus:ring-blue-800"
                         >
                             Download
                         </button>
@@ -61,8 +59,8 @@ return (
 
                     {/* table */}
                     <div className="w-full overflow-x-auto shadow-md sm:rounded-lg px-7 pt-3 pb-6">
-                        <table className="min-w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-t-xl">
+                        <table className="min-w-full text-sm text-left  text-gray-400">
+                            <thead className="text-xs  uppercase bg-gray-700 text-gray-400 rounded-t-xl">
                                 <tr>
                                     <th className="px-6 py-3">DeviceId</th>
                                     <th className="px-6 py-3">Nick Name </th>
@@ -78,14 +76,14 @@ return (
                             <tbody>
                                 {users.map((user) => (
                                     <tr
-                                        className="odd:bg-white odd:dark:bg-gray-900 
-                                                    even:bg-gray-50 even:dark:bg-gray-800 border-b 
-                                                    dark:border-gray-700 border-gray-200"
+                                        className=" odd:bg-gray-900 
+                                                     even:bg-gray-800 border-b 
+                                                    border-gray-700 "
                                         key={user._id}
                                     >
 
 
-                                        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <td className="px-6 py-4 font-medium  whitespace-nowrap text-white">
                                             {user.deviceId}
                                         </td>
                                         

@@ -1,16 +1,18 @@
-# NFC Smart Poster Quiz App
-> Interactive NFC-powered scavenger hunt: scan posters, answer quizzes, collect badges, earn points.
+# NFC Smart Poster — README
+> A full-stack React + Node/Express + MongoDB app for NFC Smart poster for branding scans,” challenges, badges, and voucher unlocks. 
+This README includes setup, run instructions, API docs, and common troubleshooting tips you can paste straight into GitHub.
 
 
 ---
 
 
-## Overview
-Brief description of the project and its core features.  
-- NFC scan → quiz flow  
-- Duplicate-scan handling with “Already Scanned” page  
-- Gamified UI (confetti, Lottie, badge reveal)  
-- Admin dashboard for posters/questions
+## Features
+-Uniquely identifies the deivce and creates a hashed value.
+-Create-or-return user on first visit (atomic upsert; StrictMode-safe)
+-Scan posters (QR/NFC) → returns a question + options + next clue
+-Submit quiz → awards badges, tracks progress, unlocks voucher after N badges
+-Leaderboard (by scanCount)
+-Solid CORS/proxy dev setup and clear error handling paths
 
 ---
 
