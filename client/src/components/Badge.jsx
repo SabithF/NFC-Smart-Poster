@@ -8,9 +8,9 @@ const allBadges = [
     { id: 'p1', name: 'Mixtape Explorer', image: 'Badge_1' },
     { id: 'p2', name: 'Tour Tracker', image: 'Badge_2' },
     { id: 'p3', name: 'Retro Tuner', image: 'Badge_3' },
-    { id: 'p4', name: 'Volume Booster', image: 'Badge_4' },
+    { id: 'p4' , name: 'Volume Booster', image: 'Badge_4' },
     { id: 'p5', name: 'Rhythm Rider', image: 'Badge_5' },
-    { id: 'p6', name: 'Music Hunter', image: 'Badge_2' },
+    
 ];
 
 export default function Badge({ deviceId , setActivePopup, onLoading }) {
@@ -102,49 +102,14 @@ export default function Badge({ deviceId , setActivePopup, onLoading }) {
                     />
                 </div>
             </div>
-            {/* Leaderboard */}
-            {/* <div className="flex items-center justify-center">
-                <div
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 2.2, ease: "easeOut", delay: 1.1 }}
-                                className="absolute z-105  drop-shadow-2xl  "
-                                onClick={() => {
-                                        leaderboardRef?.current?.scrollIntoView({behaviour: 'smooth'});
-                                    }}
-                              >
-                                <div className="relative flex flex-col gap-3 items-center justify-center top-4">
-                
-                                  <p className="absolute z-10 text-lg font-mike text-white drop-shadow-md">Leaderboard</p>
-                
-                
-                                  <img
-                                    src="/assets/img/button-coin.png"
-                                    alt="coin-background"
-                                    className="relative z-0 h-12"
-                                    
-                                  />
-                
-                                </div>
-                                
-                
-                              </div>
-
-                
-                
-            </div> */}
-        
+                  
             
             </div>
             
             {/* Navigation button */}
             <div className="flex items-end justify-center -mt-7">
                 <div className="flex flex-row gap-3">
-                     {/* <img src='/assets/img/btn/close.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" />
-                     <img src='/assets/img/btn/home.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" />
-                     */}
-                     {/* <img src='/assets/img/btn/ok.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" /> */}
-                    
+                     
                     <div className="  flex flex-col justify-center items-center" 
                            onClick={()=> setActivePopup('leaderboard')}>
                         <img src='/assets/img/btn/next.png' alt="btn-icon" className="w-16 h-16 drop-shadow-md" /> 

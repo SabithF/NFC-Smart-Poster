@@ -50,7 +50,7 @@ export default function AlreadyScannedPage() {
         <img src="/assets/img/cross2.png" alt="Cross" className="h-24 drop-shadow-xl" />
       </motion.div>
 
-      {/* content */}
+      {/* content*/}
       <motion.div
         className="mx-auto max-w-2xl px-6 py-8 flex flex-col items-center text-center font-lucky"
         variants={item}
