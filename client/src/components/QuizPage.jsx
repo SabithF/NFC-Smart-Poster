@@ -78,7 +78,7 @@ function QuizPage() {
   const [showQuizCard, setShowQuizCard] = useState(false);
 
 
-
+// Scroll reference
   const scrolltoBannerSection = () => {
 
     bannerSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -91,7 +91,7 @@ function QuizPage() {
   }
 
 
-
+// Handle quiz submit button
   useEffect(() => {
     if (!deviceId) return;
 
@@ -128,7 +128,7 @@ function QuizPage() {
 
 
 
-
+  // Handling welcome message
   useEffect(() => {
     const handleWelcomeMessage = async () => {
       if (!deviceId) return;
@@ -154,6 +154,7 @@ function QuizPage() {
 
   }, [deviceId]);
 
+  // calculating the points
   useEffect(() => {
     const points = (scanCount * 100) + (badgeCount * 1000);
     setUserPointes(points);
@@ -174,7 +175,7 @@ function QuizPage() {
   }, [activePopup]);
 
 
-
+  // animation delay
   useEffect(() => {
     const delayAnimation = setTimeout(() => {
       setPlay(true)
@@ -183,6 +184,7 @@ function QuizPage() {
     return () => clearTimeout(delayAnimation)
   })
 
+  // image preloading
   useEffect(() => {
     const preLoadImages = [
       '/assets/img/exit.png',
@@ -795,6 +797,7 @@ function QuizPage() {
                     transition={{ duration: 2, delay: 1, ease: "easeOut" }}
                     className="absolute top-9 z-150"
                   >
+                    {/* popup badges */}
                     <div className="z-102">
                       <img
                         src={`/assets/img/badges/Badge_${posterId?.replace(/[^\d]/g, '') || 1}.png`}

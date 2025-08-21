@@ -24,6 +24,7 @@ export function AnimatedProgressBar({
     controls.start({ width: `${percentage}%` });
   }, [percentage, springValue, controls]);
 
+  // customized message depending on percentage
   useEffect(() => {
     if (percentage >= 20 && percentage <= 40) {
       setProgressMessage("Nice one! Keep scanning");
