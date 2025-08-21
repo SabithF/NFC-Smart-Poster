@@ -54,6 +54,7 @@ function Digit({ place, value, height, digitStyle }) {
   );
 }
 
+// counter animation function
 export function Counter({
   value,
   fontSize = 20,
@@ -88,6 +89,7 @@ export function Counter({
     fontWeight,
   };
 
+  //screen rendering
   return (
     <div style={{ ...defaultContainerStyle, ...containerStyle }}>
       <div style={{ ...defaultCounterStyle, ...counterStyle }}>

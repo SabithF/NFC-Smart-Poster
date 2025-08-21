@@ -90,6 +90,7 @@ export default function ScratchClueCard({ clueText, closeClueBox, closeClueCard,
             ctx.clearRect(0, 0, width, height);
         }
 
+        // handling scratching mouse and touchscreen
         canvas.addEventListener('mousedown', handleMouseDown);
         canvas.addEventListener('mouseup', handleMouseUp);
         canvas.addEventListener('mousemove', handleMouseMove);
