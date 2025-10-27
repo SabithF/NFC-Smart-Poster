@@ -132,4 +132,13 @@ http://localhost:5173/quiz/<poster id>
 
 poster id = p1, p2, p3, ...
 ```
+![NFC](https://github.com/user-attachments/assets/b9901981-c6ad-4099-aafd-f51df6e9a0c3)
+![NFC 1](https://github.com/user-attachments/assets/2cd25bdf-0d59-4ac7-be9e-281c87b87e30)
+![NFC 2](https://github.com/user-attachments/assets/77225473-5078-44a7-ad12-cdd723a22a6a)
+![NFC 3](https://github.com/user-attachments/assets/a0b72299-064d-4362-828d-c2f3bfca4409)
+
+
+
+
+
  
